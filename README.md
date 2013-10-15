@@ -1,3 +1,3 @@
-client for apiMyWallet
+client for myWalletApi
 
 now it is developing
