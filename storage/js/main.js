@@ -5,4 +5,7 @@ $( document ).ready(function() {
 	var mainView = new MainView();
 	mainView.render();
 
+	var loginView = new LoginView();
+	loginView.render();
+	
 });

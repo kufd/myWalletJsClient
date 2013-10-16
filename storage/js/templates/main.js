@@ -23,7 +23,19 @@ templates.main = _.template(
 	<!-- start page -->\
 	<div id="page">\
 	</div>\
-	<!-- end page -->'
+	<!-- end page -->\
+\
+	<!-- start footer -->\
+	<div id="footer">\
+		<div id="footer-menu">\
+			<!--ul>\
+				<li class="active"><a href="index.html">головна</a></li>\
+			</ul-->\
+		</div>\
+		<div class="contacts">Контакти: <a href="mailto:mywallet.service@gmail.com">mywallet.service@gmail.com</a></div>\
+		<p id="legal">(c) 2013 mywallet.com. Design by <a href="http://www.freecsstemplates.org/" target="_blank">Free CSS Templates</a>.</p>\
+	</div>\
+	<!-- end footer -->'
 );
 
 
