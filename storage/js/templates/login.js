@@ -1,10 +1,10 @@
 
-templates.login = _.template(
+myWallet.templates.login = _.template(
 	'<div class="login">\
 \
 		<p class="about">\
 			Сервіс який допоможе підсумувати ваші витрати.\
-			<a href="#">\
+			<a href="#about">\
 				Більше інформації.\
 			</a>\
 		</p>\
@@ -32,8 +32,8 @@ templates.login = _.template(
 			</tr>\
 			<tr>\
 				<td colspan="2">\
-					<a href="#" class="forgot">Забув пароль</a>\
-					<a href="#" class="register">\
+					<a href="#forgotPassword" class="forgot">Забув пароль</a>\
+					<a href="#register" class="register">\
 						Зареєструватись\
 					</a>\
 				</td>\

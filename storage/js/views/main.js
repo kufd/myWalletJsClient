@@ -1,6 +1,6 @@
 var MainView = Backbone.View.extend({
 	el: 'body',
-	template: templates.main,
+	template: myWallet.templates.main,
 	render: function () {
 		this.$el.html(this.template());
 	},

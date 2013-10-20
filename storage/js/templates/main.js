@@ -1,7 +1,5 @@
-var templates = new Object();
 
-
-templates.main = _.template(
+myWallet.templates.main = _.template(
 	'<!-- start header -->\
 	<div id="header">\
 		<div id="logo">\
