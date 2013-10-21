@@ -2,11 +2,6 @@ var User = Backbone.Model.extend({
 	
 	url: myWallet.apiBaseUrl + '/auth-users/',
 	
-	initialize: function(){
-		
-		
-		
-	},
 	defaults: {
 		login: null,
 		password: null,
@@ -16,16 +11,18 @@ var User = Backbone.Model.extend({
 		lang: null,
 		currency: null,
 		useEncryption: null,
-		autorized: false
+		authorized: false
 	},
 	
-	isLoaded: function()
+	isAuthorized: function()
 	{
-		return this.autorized;
+		return this.get('authorized');
 	},
 	
-	autorize: function(login, password)
+	authorize: function(login, password)
 	{
+		var user = this;
+		
 		$.ajax({
 			type: "GET",
 			url: this.url,
@@ -35,6 +32,17 @@ var User = Backbone.Model.extend({
 		    },
 			data: {},
 			dataType: 'json',
+			success: function(fields)
+			{
+				user.set(fields);
+				user.set('authorized', true);
+				user.set('password', password);
+				user.trigger('autorize:success');
+			},
+			error: function(data)
+			{
+				alert($.parseJSON(data.responseText).message);
+			}
 		});
 	}
 });

@@ -8,7 +8,7 @@ myWallet.templates.main = _.template(
 		</div>\
 		<div id="menu">\
 			<ul>\
-				<li><a href="#" class="wallet">Гаманець</a></li>\
+				<li><a href="#spendings" class="wallet">Гаманець</a></li>\
 				<li><a href="#" class="profile">Профіль</a></li>\
 				<li><a href="#" class="controlPanel">Адмін-панель</a></li>\
 				<li><a href="#" class="login">Вхід</a></li>\

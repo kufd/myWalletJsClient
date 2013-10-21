@@ -12,7 +12,7 @@ var LoginView = Backbone.View.extend({
 	},
 	
 	login: function(){
-		myWallet.user.autorize(
+		myWallet.user.authorize(
 			this.$("input[name=login]").val(), 
 			this.$("input[name=password]").val()
 		);
