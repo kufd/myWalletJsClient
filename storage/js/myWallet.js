@@ -72,13 +72,13 @@ myWallet.initUser = function()
 	this.user = new User();
 }
 
-myWallet.isUserAuthorized = function()
+myWallet.isUserLoggedIn = function()
 {
-	if(!this.user.isAuthorized())
+	if(!this.user.isLoggedIn())
 	{
 		this.router.navigate("login", {trigger: true});
 	}
 	
-	return this.user.isAuthorized();
+	return this.user.isLoggedIn();
 }
 

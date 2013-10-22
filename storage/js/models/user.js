@@ -14,12 +14,12 @@ var User = Backbone.Model.extend({
 		authorized: false
 	},
 	
-	isAuthorized: function()
+	isLoggedIn: function()
 	{
-		return this.get('authorized');
+		return this.get('loggedIn');
 	},
 	
-	authorize: function(login, password)
+	login: function(login, password)
 	{
 		var user = this;
 		
@@ -35,14 +35,21 @@ var User = Backbone.Model.extend({
 			success: function(fields)
 			{
 				user.set(fields);
-				user.set('authorized', true);
+				user.set('loggedIn', true);
 				user.set('password', password);
-				user.trigger('autorize:success');
+				user.trigger('login:success');
 			},
 			error: function(data)
 			{
 				alert($.parseJSON(data.responseText).message);
 			}
 		});
+	},
+	
+	logout: function()
+	{
+		this.clear();
+		this.set('loggedIn', false);
+		this.trigger('logout');
 	}
 });

@@ -4,7 +4,7 @@ var SpendingsView = Backbone.View.extend({
 	
 	initialize: function () {
 		myWallet.user.bind(
-			'autorize:success', 
+			'login:success', 
 			function(){ 
 				myWallet.router.navigate("spendings", {trigger: true}); 
 			}
@@ -12,7 +12,7 @@ var SpendingsView = Backbone.View.extend({
     },
 	
 	render: function () {
-		if(myWallet.isUserAuthorized())
+		if(myWallet.isUserLoggedIn())
 		{
 			this.$el.html(this.template());
 		}
