@@ -14,6 +14,7 @@ var SpendingsView = Backbone.View.extend({
 	render: function () {
 		if(myWallet.isUserLoggedIn())
 		{
+			this.trigger('render');
 			this.$el.html(this.template());
 		}
 	},

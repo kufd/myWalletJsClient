@@ -23,6 +23,7 @@ var LoginView = Backbone.View.extend({
 		}
 		else
 		{
+			this.trigger('render');
 			this.$el.html(this.template());
 		}
 	},

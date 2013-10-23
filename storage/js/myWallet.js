@@ -25,8 +25,8 @@ myWallet.init = function()
 	this.views.forgotPassword = new ForgotPasswordView();
 	this.views.spendings = new SpendingsView();
 	
-	
-	
+	this.views.main.initAfterEvrithing();
+		
 	var Router = Backbone.Router.extend({
 
 		routes: {
