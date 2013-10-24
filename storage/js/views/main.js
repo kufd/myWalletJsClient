@@ -54,6 +54,22 @@ var MainView = Backbone.View.extend({
 				view.$('a.login').show();
 			}
 		);
+		
+		myWallet.views.profile.bind(
+			'render', 
+			function(){ 
+				view.$('a.login, a.profile').hide();
+				view.$('a.logout, a.spendings').show();
+			}
+		);
+		
+		myWallet.views.forgotPassword.bind(
+			'render', 
+			function(){ 
+				view.$('a.profile, a.logout, a.spendings').hide();
+				view.$('a.login').show();
+			}
+		);
 	}
 });
 

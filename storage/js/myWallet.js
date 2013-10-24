@@ -24,6 +24,7 @@ myWallet.init = function()
 	this.views.register = new RegisterView();
 	this.views.forgotPassword = new ForgotPasswordView();
 	this.views.spendings = new SpendingsView();
+	this.views.profile = new ProfileView();
 	
 	this.views.main.initAfterEvrithing();
 		
@@ -36,7 +37,7 @@ myWallet.init = function()
 			"register": "register",
 			"forgotPassword": "forgotPassword",
 			"spendings": "spendings",
-			
+			"profile": "profile",
 		},
 
 		login: function() {
@@ -57,6 +58,10 @@ myWallet.init = function()
 
 		spendings: function() {
 			myWallet.views.spendings.render();
+		},
+
+		profile: function() {
+			myWallet.views.profile.render();
 		}
 
 	});
