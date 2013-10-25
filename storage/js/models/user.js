@@ -1,6 +1,7 @@
 var User = Backbone.Model.extend({
 	
-	url: myWallet.apiBaseUrl + '/auth-users/',
+	urlAuth: myWallet.apiBaseUrl + '/auth-users/',
+	url: myWallet.apiBaseUrl + '/users/',
 	
 	defaults: {
 		login: null,
@@ -25,7 +26,7 @@ var User = Backbone.Model.extend({
 		
 		$.ajax({
 			type: "GET",
-			url: this.url,
+			url: this.urlAuth,
 			async: false,
 			headers: {
 		        "Authorization": "Basic " + btoa(login+":"+password)
@@ -41,7 +42,7 @@ var User = Backbone.Model.extend({
 			},
 			error: function(data)
 			{
-				alert($.parseJSON(data.responseText).message);
+				myWallet.errorMsg($.parseJSON(data.responseText).message);
 			}
 		});
 	},
@@ -51,5 +52,24 @@ var User = Backbone.Model.extend({
 		this.clear();
 		this.set('loggedIn', false);
 		this.trigger('logout');
-	}
+	},
+	
+	register: function(fields)
+	{
+		$.ajax({
+			type: "POST",
+			url: this.url,
+			async: false,
+			data: fields,
+			dataType: 'json',
+			success: function(fields)
+			{
+				myWallet.router.navigate("login", {trigger: true});
+			},
+			error: function(data)
+			{
+				myWallet.errorMsg($.parseJSON(data.responseText).message);
+			}
+		});
+	},
 });

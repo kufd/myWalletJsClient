@@ -1,10 +1,11 @@
 var LoginView = Backbone.View.extend({
 	
 	el: '#page',
+	rootEl:'div.login',
 	template: myWallet.templates.login,
 	
 	events: {
-	    "click .submit input": "login"
+		"click div.login .submit input": "login"
 	},
 	
 	initialize: function () {

@@ -87,3 +87,8 @@ myWallet.isUserLoggedIn = function()
 	return this.user.isLoggedIn();
 }
 
+myWallet.errorMsg = function(msg)
+{
+	alert(msg);
+}
+
