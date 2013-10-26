@@ -89,6 +89,6 @@ myWallet.isUserLoggedIn = function()
 
 myWallet.errorMsg = function(msg)
 {
-	alert(msg);
+	$.jboxmessage('Помилка!', msg, 'top', 'error');
 }
 
