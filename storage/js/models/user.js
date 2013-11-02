@@ -42,7 +42,8 @@ var User = Backbone.Model.extend({
 			},
 			error: function(data)
 			{
-				myWallet.errorMsg($.parseJSON(data.responseText).message);
+				var msg = myWallet.getErrorMessage($.parseJSON(data.responseText).code);
+				myWallet.errorMsg(msg);
 			}
 		});
 	},
@@ -68,7 +69,34 @@ var User = Backbone.Model.extend({
 			},
 			error: function(data)
 			{
-				myWallet.errorMsg($.parseJSON(data.responseText).message);
+				var msg = myWallet.getErrorMessage($.parseJSON(data.responseText).code);
+				myWallet.errorMsg(msg);
+			}
+		});
+	},
+	
+	path: function(fields)
+	{
+		var user = this;
+		var url = this.url + user.get('login') + '/';
+
+		$.ajax({
+			type: "PATCH",
+			url: url,
+			async: false,
+			headers: {
+		        "Authorization": "Basic " + btoa(user.get('login')+":"+user.get('password'))
+		    },
+			data: fields,
+			dataType: 'json',
+			success: function(fields)
+			{
+				alert('success');
+			},
+			error: function(data)
+			{
+				var msg = myWallet.getErrorMessage($.parseJSON(data.responseText).code);
+				myWallet.errorMsg(msg);
 			}
 		});
 	},

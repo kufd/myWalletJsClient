@@ -23,7 +23,7 @@ myWallet.templates.register = _.template(
 		</tr>\
 		<tr>\
 			<td>Повтор пароля</td>\
-			<td><input type="text" name="rePassword"></td>\
+			<td><input type="text" name="confirmPassword"></td>\
 		</tr>\
 		<tr>\
 			<td colspan="2" class="submit">\

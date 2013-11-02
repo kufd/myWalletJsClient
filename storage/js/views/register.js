@@ -17,10 +17,11 @@ var RegisterView = Backbone.View.extend({
 			'login': this.$("input[name=login]").val(), 
 			'name': this.$("input[name=name]").val(), 
 			'email': this.$("input[name=email]").val(), 
-			'password': this.$("input[name=password]").val(), 
+			'password': this.$("input[name=password]").val(),
+			'confirmPassword': this.$("input[name=confirmPassword]").val(),
 			'lang': 'ua', 
 			'currency': 'грн', 
-			'useEncryption': '1'
+			'useEncryption': '0'
 		});
 	}
 });

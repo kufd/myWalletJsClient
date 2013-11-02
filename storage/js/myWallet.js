@@ -4,6 +4,7 @@ var myWallet = {
 	user:null,
 	apiBaseUrl: 'http://my-wallet-js-client/v1',
 	router: null,
+	errors:{},
 };
 
 
@@ -90,5 +91,15 @@ myWallet.isUserLoggedIn = function()
 myWallet.errorMsg = function(msg)
 {
 	$.jboxmessage('Помилка!', msg, 'top', 'error');
+}
+
+myWallet.setErrors = function(errors)
+{
+	this.errors = errors;
+}
+
+myWallet.getErrorMessage = function(code)
+{
+	return this.errors[code] ? this.errors[code] : 'Невідома помилка';
 }
 
