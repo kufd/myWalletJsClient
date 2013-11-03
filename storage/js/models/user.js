@@ -75,10 +75,11 @@ var User = Backbone.Model.extend({
 		});
 	},
 	
-	path: function(fields)
+	patch: function(fields)
 	{
 		var user = this;
 		var url = this.url + user.get('login') + '/';
+		var result = false;
 
 		$.ajax({
 			type: "PATCH",
@@ -89,9 +90,14 @@ var User = Backbone.Model.extend({
 		    },
 			data: fields,
 			dataType: 'json',
-			success: function(fields)
+			success: function()
 			{
-				alert('success');
+				user.set(fields);
+				if(fields['newPassword'])
+				{
+					user.set('password', fields['newPassword']);
+				}
+				result = true;
 			},
 			error: function(data)
 			{
@@ -99,5 +105,7 @@ var User = Backbone.Model.extend({
 				myWallet.errorMsg(msg);
 			}
 		});
+		
+		return result;
 	},
 });

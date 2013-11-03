@@ -93,6 +93,11 @@ myWallet.errorMsg = function(msg)
 	$.jboxmessage('Помилка!', msg, 'top', 'error');
 }
 
+myWallet.msg = function(msg)
+{
+	$.jboxmessage('Повідомлення', msg, 'top');
+}
+
 myWallet.setErrors = function(errors)
 {
 	this.errors = errors;

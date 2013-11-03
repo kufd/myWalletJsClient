@@ -5,7 +5,7 @@ var ProfileView = Backbone.View.extend({
 	events: {
 		"click div.profile .submit input": "save"
 	},
-	
+		
 	render: function () {
 		if(myWallet.isUserLoggedIn())
 		{
@@ -18,7 +18,6 @@ var ProfileView = Backbone.View.extend({
 	
 	save: function(){
 		var fields = {
-			'login': this.$("input[name=login]").val(),
 			'name': this.$("input[name=name]").val(),
 			'email': this.$("input[name=email]").val(),
 			'lang': this.$("input[name=lang]").val(),
@@ -29,7 +28,12 @@ var ProfileView = Backbone.View.extend({
 			'password': this.$("input[name=password]").val(),
 		};
 		
-		myWallet.user.path(fields);
+		if(myWallet.user.patch(fields))
+		{
+			myWallet.msg('Профіль збережено');			
+		}
+		
+		this.$("input[name=password], input[name=newPassword], input[name=confirmNewPassword]").val('');
 	}
 });
 
