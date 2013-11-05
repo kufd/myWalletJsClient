@@ -1,7 +1,7 @@
 
-myWallet.templates.spendings = _.template(
+myWallet.templates.spendings =
 	'<table>\
-		<tr>\
+	<tr>\
 		<th class="spendingName">\
 			<div data-sort="name">Витрата</div>\
 		</th>\
@@ -15,7 +15,13 @@ myWallet.templates.spendings = _.template(
 			Дії\
 		</th>\
 	</tr>\
-	</table>'
-);
+	<% spendings.each(function(spending) { %>\
+	<tr>\
+		<td colspan="4">\
+		<%=spending.get("spendingName")%>\
+		</td>\
+	</tr>\
+	<% }); %>\
+	</table>';
 
 

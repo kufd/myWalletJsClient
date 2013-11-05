@@ -31,7 +31,7 @@ myWallet.templates.profile =
 		</tr>\
 		<tr>\
 			<td>Шифрувати дані</td>\
-			<td><input type="checkbox" name="useEncryption" <%=user.get(\'useEncryption\') ? \'checked="checked"\' : \'\'%> title="При активації цієї опції будуть зашифровані цифри витрат. Але при втраті паролю, їх не можна буде відновити"/></td>\
+			<td><input type="checkbox" name="useEncryption" <%=user.get(\'useEncryption\')==1 ? \'checked="checked"\' : \'\'%> title="При активації цієї опції будуть зашифровані цифри витрат. Але при втраті паролю, їх не можна буде відновити"/></td>\
 		</tr>\
 		<tr>\
 			<td class="pt-15">Новий пароль</td>\
