@@ -1,6 +1,6 @@
 
 myWallet.templates.spendings =
-	'<table>\
+	'<table class="spendings">\
 	<tr>\
 		<th class="spendingName">\
 			<div data-sort="name">Витрата</div>\
@@ -15,13 +15,38 @@ myWallet.templates.spendings =
 			Дії\
 		</th>\
 	</tr>\
+\
+	<% var sum = 0; %>\
 	<% spendings.each(function(spending) { %>\
-	<tr>\
-		<td colspan="4">\
-		<%=spending.get("spendingName")%>\
+	<% sum+=parseInt(spending.get("amount")*100); %>\
+	<tr data-spending-id="<%=spending.get("id")%>">\
+		<td class="spendingName">\
+			<%=spending.get("spendingName")%>\
+		</td>\
+		<td class="amount">\
+		<%=spending.get("amount")%>  <%=user.get("currency")%>\
+		</td>\
+		<td class="date">\
+			<%=spending.get("date")%>\
+		</td>\
+		<td class="actions">\
+			<div class="edit" title="Редагувати">&nbsp;</div>\
+			<div class="delete" title="Видалити">&nbsp;</div>\
 		</td>\
 	</tr>\
 	<% }); %>\
+\
+	<tr class="sum">\
+		<td class="spendingName">\
+			Загальна сума\
+		</td>\
+		<td class="amount">\
+			<%=sum/100%> <%=user.get("currency")%>\
+		</td>\
+		<td class="date">\
+		</td>\
+		<td class="actions">\
+		</td>\
+	</tr>\
 	</table>';
-
 

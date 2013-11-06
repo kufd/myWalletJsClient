@@ -1,0 +1,104 @@
+table.spendings
+{
+	border-collapse: collapse;
+	width:620px;
+}
+table.spendings tr:hover td
+{
+	background-color:#F7F0DC;
+}
+table.spendings tr.sum:hover td
+{
+	background-color:white;
+}
+table.spendings td
+{
+	padding:5px;
+	border-bottom:1px solid #dedede;
+	color:black;
+	font-size:13px;
+}
+table.spendings tr.sum td
+{
+	padding-top:15px;
+	font-weight:bold;
+	border:none;
+}
+table.spendings th
+{
+	text-align:left;
+	padding-bottom:10px;
+	padding-left:5px;
+}
+
+table.spendings th.spendingName
+{
+	width:200px;
+}
+table.spendings th.amount
+{
+	width:150px;
+}
+table.spendings th.date
+{
+	width:150px;
+}
+table.spendings th.actions
+{
+	width:100px;
+}
+table.spendings th div
+{
+	cursor:pointer;
+}
+table.spendings th div.asc
+{
+	background-image: url(/storage/images/icons/20/asc.png);
+	background-position: right;
+	padding-right:20px;
+	background-repeat: no-repeat;
+	display: inline-block;
+}
+table.spendings th div.desc
+{
+	background-image: url(/storage/images/icons/20/desc.png);
+	background-position: right;
+	padding-right:20px;
+	background-repeat: no-repeat;
+	display: inline-block;
+}
+
+table.spendings td.spendingName
+{
+}
+table.spendings td.amount
+{
+}
+table.spendings td.date
+{
+}
+table.spendings td.actions
+{
+}
+table.spendings td.actions div.edit
+{
+	width:16px;
+	height:16px;
+	cursor:pointer;
+	background-image: url(../../storage/images/icons/16/edit.png);
+	float:left; 
+}
+table.spendings td.actions div.delete
+{
+	width:16px;
+	height:16px;
+	cursor:pointer;
+	background-image: url(../../storage/images/icons/16/delete.png);
+	float:left;
+	margin-left:10px;
+}
+
+
+
+
+

@@ -23,14 +23,12 @@ var User = Backbone.Model.extend({
 	login: function(login, password)
 	{
 		var user = this;
-		
+
 		$.ajax({
 			type: "GET",
 			url: this.urlAuth,
 			async: false,
-			headers: {
-		        "Authorization": "Basic " + btoa(login+":"+password)
-		    },
+			headers: myWallet.getAuthHeader(login, password),
 			data: {},
 			dataType: 'json',
 			success: function(fields)
@@ -85,9 +83,7 @@ var User = Backbone.Model.extend({
 			type: "PATCH",
 			url: url,
 			async: false,
-			headers: {
-		        "Authorization": "Basic " + btoa(user.get('login')+":"+user.get('password'))
-		    },
+			headers: myWallet.getAuthHeader(),
 			data: fields,
 			dataType: 'json',
 			success: function()

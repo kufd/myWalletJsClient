@@ -21,11 +21,7 @@ var SpendingsView = Backbone.View.extend({
 			
 			this.spendings.fetch();
 			
-			_.each(this.spendings, function(spending) {
-				//alert(spending);
-			});
-			
-			var template = _.template(this.template, {spendings: this.spendings});
+			var template = _.template(this.template, {spendings: this.spendings, user: myWallet.user});
 			this.$el.html(template);
 			
 			this.trigger('render');

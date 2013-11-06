@@ -28,6 +28,7 @@ myWallet.init = function()
 	this.views.profile = new ProfileView();
 	
 	this.views.main.initAfterEvrithing();
+	
 		
 	var Router = Backbone.Router.extend({
 
@@ -106,5 +107,12 @@ myWallet.setErrors = function(errors)
 myWallet.getErrorMessage = function(code)
 {
 	return this.errors[code] ? this.errors[code] : 'Невідома помилка';
+}
+
+myWallet.getAuthHeader = function(login, password)
+{
+	login = login ? login : this.user.get('login');
+	password = password ? password : this.user.get('password');
+	return {"Authorization": "Basic " + btoa(login+":"+password)};
 }
 

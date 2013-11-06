@@ -12,9 +12,7 @@ var Spendings = Backbone.Collection.extend({
 			type: "GET",
 			url: this.url,
 			async: false,
-			headers: {
-		        "Authorization": "Basic " + btoa(myWallet.user.get('login')+":"+myWallet.user.get('password'))
-		    },
+			headers: myWallet.getAuthHeader(),
 			data: {},
 			dataType: 'json',
 			success: function(data)
