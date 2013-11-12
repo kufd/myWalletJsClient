@@ -3,9 +3,11 @@ var SpendingsView = Backbone.View.extend({
 	template: myWallet.templates.spendings,
 	spendings: null,
 	
+	events: {
+		"click table.spendings .delete": "deleteSpending"
+	},
+	
 	initialize: function () {
-		
-		this.spendings = new Spendings(); 
 		
 		myWallet.user.bind(
 			'login:success', 
@@ -19,13 +21,39 @@ var SpendingsView = Backbone.View.extend({
 		if(myWallet.isUserLoggedIn())
 		{
 			
-			this.spendings.fetch();
-			
-			var template = _.template(this.template, {spendings: this.spendings, user: myWallet.user});
+			var template = _.template(this.template, {spendings: this._getSpendings(), user: myWallet.user});
 			this.$el.html(template);
 			
 			this.trigger('render');
 		}
 	},
+	
+	deleteSpending: function(event)
+	{
+		try
+		{
+			var spendingId =$(event.target).parents('tr').attr('data-spending-id');
+			this._getSpendings().deleteSpending(spendingId);
+		}
+		catch(e)
+		{
+			myWallet.errorMsg(e);
+		}
+		
+		this.render();
+	},
+	
+	_getSpendings: function()
+	{
+		if (this.spendings == null)
+		{
+			this.spendings = new Spendings(); 
+			this.spendings.fetch();
+		}
+		
+		return this.spendings;
+	}
+	
+	
 });
 

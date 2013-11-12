@@ -25,5 +25,14 @@ var Spendings = Backbone.Collection.extend({
 				myWallet.errorMsg(msg);
 			}
 		});
+	},
+
+	deleteSpending: function(spendingId)
+	{
+		var spending = this.get(spendingId);
+		
+		spending.destroy();
+		
+		this.remove(spending);
 	}
 });
