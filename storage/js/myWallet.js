@@ -26,6 +26,7 @@ myWallet.init = function()
 	this.views.forgotPassword = new ForgotPasswordView();
 	this.views.spendings = new SpendingsView();
 	this.views.profile = new ProfileView();
+	this.views.formAddSpending = new FormAddSpendingView();
 	
 	this.views.main.initAfterEvrithing();
 	

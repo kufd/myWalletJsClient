@@ -4,7 +4,8 @@ var SpendingsView = Backbone.View.extend({
 	spendings: null,
 	
 	events: {
-		"click table.spendings .delete": "deleteSpending"
+		"click div.spendings table.spendings .delete": "deleteSpending",
+		"click div.spendings div.tool_panel .button_add_spending": "showFormAddSpending",
 	},
 	
 	initialize: function () {
@@ -23,6 +24,8 @@ var SpendingsView = Backbone.View.extend({
 			
 			var template = _.template(this.template, {spendings: this._getSpendings(), user: myWallet.user});
 			this.$el.html(template);
+			
+			this.$('div.tool_panel .button_add_spending').button();
 			
 			this.trigger('render');
 		}
@@ -52,6 +55,11 @@ var SpendingsView = Backbone.View.extend({
 		}
 		
 		return this.spendings;
+	},
+	
+	showFormAddSpending: function()
+	{
+		myWallet.views.formAddSpending.render();
 	}
 	
 	
