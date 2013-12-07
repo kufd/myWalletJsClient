@@ -60,8 +60,34 @@ var SpendingsView = Backbone.View.extend({
 	showFormAddSpending: function()
 	{
 		myWallet.views.formAddSpending.render();
-	}
+	},
 	
+	addSpending: function(spendingData)
+	{
+		try
+		{
+			var spending = new Spending();	
+			
+			spending.save(
+				spendingData, 
+				{
+					success: function(model, response, options){
+						spending.set('id', response.spendingId);
+					},
+					error: function(){
+						throw 'Unknown error';
+					}
+				}
+			);
+
+			this._getSpendings().add(spending);
+			this.render();
+		}
+		catch(e)
+		{
+			myWallet.errorMsg(e);
+		}
+	},
 	
 });
 

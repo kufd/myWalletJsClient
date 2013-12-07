@@ -12,6 +12,8 @@ var myWallet = {
 
 myWallet.init = function()
 {
+	Backbone.emulateJSON = true; 
+	
 	this.templates = new Object();
 	this.views = new Object();
 	

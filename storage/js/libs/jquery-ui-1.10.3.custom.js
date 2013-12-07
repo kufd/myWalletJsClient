@@ -7883,6 +7883,7 @@ $.extend(Datepicker.prototype, {
 			dayNames = (settings ? settings.dayNames : null) || this._defaults.dayNames,
 			monthNamesShort = (settings ? settings.monthNamesShort : null) || this._defaults.monthNamesShort,
 			monthNames = (settings ? settings.monthNames : null) || this._defaults.monthNames,
+			monthNamesGenitive = (settings ? settings.monthNamesGenitive : null) || this._defaults.monthNamesGenitive,
 			year = -1,
 			month = -1,
 			day = -1,
@@ -7964,6 +7965,9 @@ $.extend(Datepicker.prototype, {
 						break;
 					case "M":
 						month = getName("M", monthNamesShort, monthNames);
+						break;
+					case "G":
+						month = getName("G", monthNamesShort, monthNamesGenitive);
 						break;
 					case "y":
 						year = getNumber("y");
@@ -8082,6 +8086,7 @@ $.extend(Datepicker.prototype, {
 			dayNames = (settings ? settings.dayNames : null) || this._defaults.dayNames,
 			monthNamesShort = (settings ? settings.monthNamesShort : null) || this._defaults.monthNamesShort,
 			monthNames = (settings ? settings.monthNames : null) || this._defaults.monthNames,
+			monthNamesGenitive = (settings ? settings.monthNamesGenitive : null) || this._defaults.monthNamesGenitive,
 			// Check whether a format character is doubled
 			lookAhead = function(match) {
 				var matches = (iFormat + 1 < format.length && format.charAt(iFormat + 1) === match);
@@ -8132,6 +8137,9 @@ $.extend(Datepicker.prototype, {
 							break;
 						case "M":
 							output += formatName("M", date.getMonth(), monthNamesShort, monthNames);
+							break;
+						case "G":
+							output += formatName("G", date.getMonth(), monthNamesShort, monthNamesGenitive);
 							break;
 						case "y":
 							output += (lookAhead("y") ? date.getFullYear() :

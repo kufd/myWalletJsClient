@@ -27,6 +27,15 @@ var Spending = Backbone.Model.extend({
 				throw myWallet.getErrorMessage($.parseJSON(data.responseText).code);
 			}
 		});
-		
+	},
+	
+	save: function(attributes, options)
+	{
+		attributes = attributes || {};
+		options = options || {};
+		options.headers = myWallet.getAuthHeader();
+		options.async = false;
+				
+		return Backbone.Model.prototype.save.call(this, attributes, options);
 	}
 });

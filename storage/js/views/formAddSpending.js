@@ -1,5 +1,5 @@
 var FormAddSpendingView = Backbone.View.extend({
-	el: '#page',
+	el: 'body',
 	template: myWallet.templates.formAddSpending,
 	
 	render: function () {
@@ -7,8 +7,10 @@ var FormAddSpendingView = Backbone.View.extend({
 		var template = _.template(this.template);
 		this.$el.append(template);
 		
-		this.$("input[name=date]").datepicker({
-			dateFormat:'d MM yy'
+		this.$("input[name=dateFront]").datepicker({
+			dateFormat:'d GG yy',
+			altField: this.$("input[name=date]"),
+			altFormat: "yy-mm-dd",
 		});
 		
 		this.$('div.formAddSpending').dialog({
@@ -16,7 +18,7 @@ var FormAddSpendingView = Backbone.View.extend({
 				[ 
 					{
 		               	text: "Зберегти",
-		               	click: function() { view.remove(); }
+		               	click: function() { view.saveSpending(); }
 					},
 				 	{
 				 		text: "Відмінити",
@@ -32,5 +34,15 @@ var FormAddSpendingView = Backbone.View.extend({
 	remove: function () {
 		$('div.formAddSpending').remove();
 	},
+	
+	saveSpending: function(){
+		myWallet.views.spendings.addSpending({
+			spendingName: this.$("input[name=spendingName]").val(),
+			amount: this.$("input[name=amount]").val(),
+			date: this.$("input[name=date]").val(),
+		});
+		
+		this.remove(); 
+	}
 });
 

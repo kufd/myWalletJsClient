@@ -13,7 +13,8 @@ myWallet.templates.formAddSpending =
 		<tr>\
 			<td class="name">Дата</td>\
 			<td class="value">\
-				<input type="text" name="date" value="" readonly="readonly" />\
+				<input type="text" name="dateFront" value="" readonly="readonly" />\
+				<input type="hidden" name="date" value="" />\
 			</td>\
 		</tr>\
 		</table>\
