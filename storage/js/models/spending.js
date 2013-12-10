@@ -35,6 +35,13 @@ var Spending = Backbone.Model.extend({
 		options = options || {};
 		options.headers = myWallet.getAuthHeader();
 		options.async = false;
+		options.patch = true;
+		options.wait = true;
+		
+		if(!this.isNew())
+		{
+			options.url = this.url + this.get('id');
+		}
 				
 		return Backbone.Model.prototype.save.call(this, attributes, options);
 	}

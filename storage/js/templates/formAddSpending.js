@@ -18,5 +18,6 @@ myWallet.templates.formAddSpending =
 			</td>\
 		</tr>\
 		</table>\
+		<input type="hidden" name="spendingId" value="" />\
 	</div>';
 

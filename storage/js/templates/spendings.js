@@ -33,7 +33,7 @@ myWallet.templates.spendings =
 			<%=spending.get("amount")%>  <%=user.get("currency")%>\
 			</td>\
 			<td class="date">\
-				<%=spending.get("date")%>\
+				<%=$.datepicker.formatDate("d GG yy", new Date(spending.get("date")))%>\
 			</td>\
 			<td class="actions">\
 				<div class="edit" title="Редагувати">&nbsp;</div>\

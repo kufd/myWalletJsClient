@@ -6,6 +6,7 @@ var SpendingsView = Backbone.View.extend({
 	events: {
 		"click div.spendings table.spendings .delete": "deleteSpending",
 		"click div.spendings div.tool_panel .button_add_spending": "showFormAddSpending",
+		"click div.spendings table.spendings div.edit": "showFormEditSpending",
 	},
 	
 	initialize: function () {
@@ -35,7 +36,7 @@ var SpendingsView = Backbone.View.extend({
 	{
 		try
 		{
-			var spendingId =$(event.target).parents('tr').attr('data-spending-id');
+			var spendingId = $(event.target).parents('tr').attr('data-spending-id');
 			this._getSpendings().deleteSpending(spendingId);
 		}
 		catch(e)
@@ -62,23 +63,37 @@ var SpendingsView = Backbone.View.extend({
 		myWallet.views.formAddSpending.render();
 	},
 	
-	addSpending: function(spendingData)
+	showFormEditSpending: function(event)
+	{
+		var spendingId = $(event.target).parents('tr').attr('data-spending-id');
+		var spending = this._getSpendings().get(spendingId);
+		
+		myWallet.views.formAddSpending.render(spending);
+	},
+	
+	saveSpending: function(spendingId, spendingData)
 	{
 		try
 		{
-			var spending = new Spending();	
+			var spending = this._getSpendings().get(spendingId);
+			spending = spending || new Spending();	
 			
 			spending.save(
 				spendingData, 
 				{
 					success: function(model, response, options){
-						spending.set('id', response.spendingId);
+						if(spending.isNew())
+						{
+							spending.set('id', response.spendingId);
+						}
 					},
-					error: function(){
-						throw 'Unknown error';
-					}
+					error: function(model, xhr, options){
+						throw myWallet.getErrorMessage($.parseJSON(xhr.responseText).code);
+					},
 				}
 			);
+			
+			this.trigger('spending:save:success');
 
 			this._getSpendings().add(spending);
 			this.render();
