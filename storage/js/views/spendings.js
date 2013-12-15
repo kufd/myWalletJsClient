@@ -7,6 +7,7 @@ var SpendingsView = Backbone.View.extend({
 		"click div.spendings table.spendings .delete": "deleteSpending",
 		"click div.spendings div.tool_panel .button_add_spending": "showFormAddSpending",
 		"click div.spendings table.spendings div.edit": "showFormEditSpending",
+		"click div.spendings table.spendings th div": "sortSpendings",
 	},
 	
 	initialize: function () {
@@ -18,12 +19,19 @@ var SpendingsView = Backbone.View.extend({
 			}
 		);
     },
-	
-	render: function () {
+    
+    render: function () {
 		if(myWallet.isUserLoggedIn())
 		{
-			
-			var template = _.template(this.template, {spendings: this._getSpendings(), user: myWallet.user});
+			this._getSpendings().sort();
+			var template = _.template(
+				this.template, 
+				{
+					spendings: this._getSpendings(), 
+					user: myWallet.user, 
+					sortOptions: this.spendings.sortOptions
+				}
+			);
 			this.$el.html(template);
 			
 			this.$('div.tool_panel .button_add_spending').button();
@@ -103,6 +111,23 @@ var SpendingsView = Backbone.View.extend({
 			myWallet.errorMsg(e);
 		}
 	},
+	
+	sortSpendings: function(event)
+	{
+		var field = $(event.target).attr('data-field');
+		
+		if(this.spendings.sortOptions.field == field)
+		{
+			this.spendings.sortOptions.direction = this.spendings.sortOptions.direction == 'asc' ? 'desc' : 'asc';
+		}
+		else
+		{
+			this.spendings.sortOptions.direction = 'desc';
+			this.spendings.sortOptions.field = field;
+		}
+		
+		this.render();
+	}
 	
 });
 

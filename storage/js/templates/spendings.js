@@ -9,13 +9,13 @@ myWallet.templates.spendings =
 		<table class="spendings">\
 		<tr>\
 			<th class="spendingName">\
-				<div data-sort="name">Витрата</div>\
+				<div data-field="spendingName" class="<%=sortOptions.field == "spendingName" ? sortOptions.direction : ""%>">Витрата</div>\
 			</th>\
 			<th class="amount">\
-				<div data-sort="amount">Сума</div>\
+				<div data-field="amount" class="<%=sortOptions.field == "amount" ? sortOptions.direction : ""%>">Сума</div>\
 			</th>\
 			<th class="date">\
-				<div data-sort="date">Дата</div>\
+				<div data-field="date" class="<%=sortOptions.field == "date" ? sortOptions.direction : ""%>">Дата</div>\
 			</th>\
 			<th class="actions">\
 				Дії\
