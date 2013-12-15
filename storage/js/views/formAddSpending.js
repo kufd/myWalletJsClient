@@ -25,7 +25,12 @@ var FormAddSpendingView = Backbone.View.extend({
 		
 		if(spending instanceof Spending)
 		{
-			this.$("input[name=spendingName]").val(spending.get('spendingName'));
+			if($.inArray(spending.get('spendingName'), spendingsTop.get()) == -1)
+			{
+				this.replaceSpengingNameSelectByInput();
+			}
+			
+			this.$("input[name=spendingName], select[name=spendingName]").val(spending.get('spendingName'));
 			this.$("input[name=amount]").val(spending.get('amount'));
 			this.$("input[name=date]").val(spending.get('date'));
 			this.$("input[name=dateFront]").val($.datepicker.formatDate('d GG yy', new Date(spending.get('date'))));
