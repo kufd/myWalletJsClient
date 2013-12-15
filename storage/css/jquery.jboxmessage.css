@@ -8,7 +8,8 @@
 	padding: 25px;
 	cursor: pointer;
 
-	color: #999; font-family: Tahoma; font-size: 13px;	
+	color: #999; font-family: Tahoma; font-size: 13px;
+	z-index:1000;
 }
 
 .boxmessage h3

@@ -1,6 +1,10 @@
 var FormAddSpendingView = Backbone.View.extend({
 	el: 'body',
 	template: myWallet.templates.formAddSpending,
+	
+	events: {
+		"click div.formAddSpending select[name=spendingName]": "selectSpendingName"
+	},
 
 	initialize: function () {
 		
@@ -65,11 +69,24 @@ var FormAddSpendingView = Backbone.View.extend({
 		myWallet.views.spendings.saveSpending(
 			this.$("input[name=spendingId]").val(),
 			{
-				spendingName: this.$("input[name=spendingName]").val(),
+				spendingName: this.$("select[name=spendingName], input[name=spendingName]").val(),
 				amount: this.$("input[name=amount]").val().replace(',', '.'),
 				date: this.$("input[name=date]").val()
 			}
 		);
+	},
+	
+	selectSpendingName: function()
+	{
+		if(!this.$("select[name=spendingName]").val())
+		{
+			this.replaceSpengingNameSelectByInput();
+		}
+	},
+	
+	replaceSpengingNameSelectByInput: function()
+	{
+		this.$("select[name=spendingName]").replaceWith('<input type="text" name="spendingName" />');
 	}
 });
 

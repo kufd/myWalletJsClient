@@ -16,6 +16,8 @@ myWallet.init = function()
 	this.views = new Object();
 	
 	this.initUser();
+	
+	spendingsTop.initialize();
 
 	this.views.main = new MainView();
 	this.views.main.render();
