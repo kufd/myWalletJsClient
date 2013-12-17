@@ -125,7 +125,20 @@ div.spendings div.tool_panel .button_add_spending
 	-ms-user-select: none;      
 	user-select: none;
 }
-
+div.spendings div.tool_panel div.dateFilter
+{
+	padding-top:10px;
+}
+div.spendings div.tool_panel div.dateFilter input
+{
+	width:110px;
+	cursor:pointer;
+}
+div.spendings div.tool_panel div.dateFilter h5
+{
+	font-size:15px;
+	padding-bottom:5px;
+}
 
 
 

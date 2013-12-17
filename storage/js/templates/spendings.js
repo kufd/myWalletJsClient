@@ -4,6 +4,14 @@ myWallet.templates.spendings =
 \
 		<div class="tool_panel">\
 			<div class="button_add_spending">Додати витрату</div>\
+			<div class="dateFilter">\
+				<h5>Період:</h5>\
+				<input type="text" name="dateBeginFront" />\
+				<input type="hidden" name="dateBegin" />\
+				&mdash;\
+				<input type="text" name="dateEndFront" />\
+				<input type="hidden" name="dateEnd" />\
+			</div>\
 		</div>\
 \
 		<table class="spendings">\

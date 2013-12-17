@@ -34,7 +34,20 @@ var SpendingsView = Backbone.View.extend({
 			);
 			this.$el.html(template);
 			
+			//---------------- initializing tool panel ---------------
 			this.$('div.tool_panel .button_add_spending').button();
+			
+			this.$("input[name=dateBeginFront]").datepicker({
+				dateFormat:'d GG yy',
+				altField: this.$("input[name=dateBegin]"),
+				altFormat: "yy-mm-dd",
+			});
+			this.$("input[name=dateEndFront]").datepicker({
+				dateFormat:'d GG yy',
+				altField: this.$("input[name=dateEnd]"),
+				altFormat: "yy-mm-dd",
+			});
+			//-------------------
 			
 			this.trigger('render');
 		}
