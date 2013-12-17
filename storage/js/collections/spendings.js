@@ -4,7 +4,7 @@ var Spendings = Backbone.Collection.extend({
 	url: myWallet.apiBaseUrl + '/spendings/',
 	sortOptions: {'field': 'date', 'direction': 'desc'},
 	
-	fetch: function(){
+	fetch: function(dateBegin, dateEnd){
 		
 		var spendings = this;
 		
@@ -13,7 +13,7 @@ var Spendings = Backbone.Collection.extend({
 			url: this.url,
 			async: false,
 			headers: myWallet.getAuthHeader(),
-			data: {},
+			data: {dateBegin: dateBegin, dateEnd: dateEnd},
 			dataType: 'json',
 			success: function(data)
 			{

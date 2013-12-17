@@ -27,7 +27,7 @@ div.formAddSpending table td.value select
 {
 	width:210px;
 }
-div.formAddSpending table td.value input[name=date]
+div.formAddSpending table td.value input[name=dateFront]
 {
 	cursor:pointer;
 }

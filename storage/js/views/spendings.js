@@ -2,6 +2,8 @@ var SpendingsView = Backbone.View.extend({
 	el: '#page',
 	template: myWallet.templates.spendings,
 	spendings: null,
+	dateBegin: null,
+	dateEnd: null,
 	
 	events: {
 		"click div.spendings table.spendings .delete": "deleteSpending",
@@ -18,6 +20,15 @@ var SpendingsView = Backbone.View.extend({
 				myWallet.router.navigate("spendings", {trigger: true}); 
 			}
 		);
+		
+		this.dateBegin = $.datepicker.formatDate('yy-mm-01', new Date());
+		this.dateEnd = $.datepicker.formatDate('yy-mm-'+this.countDaysOfMont(), new Date());
+    },
+    
+    countDaysOfMont: function()
+    {
+    	var date = new Date();
+    	return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
     },
     
     render: function () {
@@ -37,15 +48,34 @@ var SpendingsView = Backbone.View.extend({
 			//---------------- initializing tool panel ---------------
 			this.$('div.tool_panel .button_add_spending').button();
 			
-			this.$("input[name=dateBeginFront]").datepicker({
+			
+			var view = this;
+			this.$("input[name=dateBegin]").val(this.dateBegin);
+			this.$("input[name=dateBeginFront]")
+			.val($.datepicker.formatDate('d GG yy', new Date(this.dateBegin)))
+			.datepicker({
 				dateFormat:'d GG yy',
 				altField: this.$("input[name=dateBegin]"),
 				altFormat: "yy-mm-dd",
+				onClose: function(){
+					view.dateBegin = view.$("input[name=dateBegin]").val();
+					view._getSpendings(true);
+					view.render();
+				}
 			});
-			this.$("input[name=dateEndFront]").datepicker({
+			
+			this.$("input[name=dateEnd]").val(this.dateEnd);
+			this.$("input[name=dateEndFront]")
+			.val($.datepicker.formatDate('d GG yy', new Date(this.dateEnd)))
+			.datepicker({
 				dateFormat:'d GG yy',
 				altField: this.$("input[name=dateEnd]"),
 				altFormat: "yy-mm-dd",
+				onClose: function(){
+					view.dateEnd = view.$("input[name=dateEnd]").val();
+					view._getSpendings(true);
+					view.render();
+				}
 			});
 			//-------------------
 			
@@ -68,12 +98,12 @@ var SpendingsView = Backbone.View.extend({
 		this.render();
 	},
 	
-	_getSpendings: function()
+	_getSpendings: function(force)
 	{
-		if (this.spendings == null)
+		if (force || this.spendings == null)
 		{
 			this.spendings = new Spendings(); 
-			this.spendings.fetch();
+			this.spendings.fetch(this.dateBegin, this.dateEnd);
 		}
 		
 		return this.spendings;
