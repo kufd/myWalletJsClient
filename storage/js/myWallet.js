@@ -15,7 +15,7 @@ myWallet.init = function()
 	this.templates = new Object();
 	this.views = new Object();
 	
-	this.initUser();
+	this._initUser();
 	
 	spendingsTop.initialize();
 
@@ -74,12 +74,19 @@ myWallet.init = function()
 	this.router = new Router();
 	
 	Backbone.history.start();
+
+	this._loginUser();
 }
 
 
-myWallet.initUser = function()
+myWallet._initUser = function()
 {
 	this.user = new User();
+},
+
+myWallet._loginUser = function()
+{
+	this.user.loginWithSavedLoginData();
 }
 
 myWallet.isUserLoggedIn = function()

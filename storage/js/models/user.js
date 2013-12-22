@@ -20,7 +20,7 @@ var User = Backbone.Model.extend({
 		return this.get('loggedIn');
 	},
 	
-	login: function(login, password)
+	login: function(login, password, keepLoggedIn)
 	{
 		var user = this;
 
@@ -44,11 +44,17 @@ var User = Backbone.Model.extend({
 				myWallet.errorMsg(msg);
 			}
 		});
+
+		if(this.isLoggedIn() && keepLoggedIn)
+		{
+			this._saveLoginData();
+		}
 	},
 	
 	logout: function()
 	{
 		this.clear();
+		this._removeLoginData();
 		this.set('loggedIn', false);
 		this.trigger('logout');
 	},
@@ -92,6 +98,11 @@ var User = Backbone.Model.extend({
 				if(fields['newPassword'])
 				{
 					user.set('password', fields['newPassword']);
+
+					if(user._getSavedLoginData())
+					{
+						user._saveLoginData();
+					}
 				}
 				result = true;
 			},
@@ -104,4 +115,32 @@ var User = Backbone.Model.extend({
 		
 		return result;
 	},
+
+	_getSavedLoginData: function()
+	{
+		return $.localStorage.isSet(['login','password']) ? $.localStorage.get(['login','password']) : null;
+	},
+
+	_saveLoginData: function()
+	{
+		$.localStorage.set(
+			{
+				'login': this.get('login'),
+				'password': this.get('password')
+			}
+		);
+	},
+
+	_removeLoginData: function()
+	{
+		return $.localStorage.remove(['login','password']);
+	},
+
+	loginWithSavedLoginData: function()
+	{
+		if(this._getSavedLoginData())
+		{
+			this.login(this._getSavedLoginData().login, this._getSavedLoginData().password);
+		}
+	}
 });
