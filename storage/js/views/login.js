@@ -30,11 +30,18 @@ var LoginView = Backbone.View.extend({
 	},
 	
 	login: function(){
-		myWallet.user.login(
-			this.$("input[name=login]").val(), 
-			this.$("input[name=password]").val(),
-            this.$("input[name=remember]").is(':checked')
-		);
+		try
+		{
+			myWallet.user.login(
+				this.$("input[name=login]").val(), 
+				this.$("input[name=password]").val(),
+				this.$("input[name=remember]").is(':checked')
+			);
+		}
+		catch(e)
+		{
+			myWallet.errorMsg(e);
+		}
 	}
 	
 });

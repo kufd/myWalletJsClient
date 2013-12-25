@@ -38,11 +38,7 @@ var User = Backbone.Model.extend({
 				user.set('password', password);
 				user.trigger('login:success');
 			},
-			error: function(data)
-			{
-				var msg = myWallet.getErrorMessage($.parseJSON(data.responseText).code);
-				myWallet.errorMsg(msg);
-			}
+			error: myWallet.processAjaxError
 		});
 
 		if(this.isLoggedIn() && keepLoggedIn)

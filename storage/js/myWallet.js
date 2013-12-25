@@ -86,7 +86,14 @@ myWallet._initUser = function()
 
 myWallet._loginUser = function()
 {
-	this.user.loginWithSavedLoginData();
+	try
+	{
+		this.user.loginWithSavedLoginData();
+	}
+	catch(e)
+	{
+		myWallet.errorMsg(e);
+	}
 }
 
 myWallet.isUserLoggedIn = function()
@@ -116,7 +123,32 @@ myWallet.setErrors = function(errors)
 
 myWallet.getErrorMessage = function(code)
 {
-	return this.errors[code] ? this.errors[code] : 'Невідома помилка';
+	return this.errors[code] ? this.errors[code] : this.errors[1];
+}
+
+/**
+ * 
+ * @param jqXHR login
+ * @param String password
+ * @param String errorThrown
+ */
+myWallet.processAjaxError = function(jqXHR, textStatus, errorThrown)
+{
+	if(jqXHR.status == 502)
+	{
+		throw myWallet.getErrorMessage(myWallet.errors.CONNECTION);
+	}
+	else
+	{
+		try
+		{
+			throw myWallet.getErrorMessage($.parseJSON(data.responseText).code);
+		}
+		catch(e)
+		{
+			throw myWallet.getErrorMessage(myWallet.errors.UNKNOWN);
+		}
+	}
 }
 
 myWallet.getAuthHeader = function(login, password)

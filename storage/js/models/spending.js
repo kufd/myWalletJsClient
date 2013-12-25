@@ -22,10 +22,7 @@ var Spending = Backbone.Model.extend({
 			headers: myWallet.getAuthHeader(),
 			data: {},
 			dataType: 'json',
-			error: function(data)
-			{
-				throw myWallet.getErrorMessage($.parseJSON(data.responseText).code);
-			}
+			error: myWallet.processAjaxError
 		});
 	},
 	

@@ -138,9 +138,7 @@ var SpendingsView = Backbone.View.extend({
 							spending.set('id', response.spendingId);
 						}
 					},
-					error: function(model, xhr, options){
-						throw myWallet.getErrorMessage($.parseJSON(xhr.responseText).code);
-					},
+					error: myWallet.processAjaxError
 				}
 			);
 			

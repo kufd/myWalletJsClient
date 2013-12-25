@@ -19,11 +19,7 @@ var Spendings = Backbone.Collection.extend({
 			{
 				spendings.set(data.spendings);
 			},
-			error: function(data)
-			{
-				var msg = myWallet.getErrorMessage($.parseJSON(data.responseText).code);
-				myWallet.errorMsg(msg);
-			}
+			error: myWallet.processAjaxError
 		});
 	},
 
