@@ -85,15 +85,8 @@ var SpendingsView = Backbone.View.extend({
 	
 	deleteSpending: function(event)
 	{
-		try
-		{
-			var spendingId = $(event.target).parents('tr').attr('data-spending-id');
-			this._getSpendings().deleteSpending(spendingId);
-		}
-		catch(e)
-		{
-			myWallet.errorMsg(e);
-		}
+		var spendingId = $(event.target).parents('tr').attr('data-spending-id');
+		this._getSpendings().deleteSpending(spendingId);
 		
 		this.render();
 	},
@@ -124,33 +117,26 @@ var SpendingsView = Backbone.View.extend({
 	
 	saveSpending: function(spendingId, spendingData)
 	{
-		try
-		{
-			var spending = this._getSpendings().get(spendingId);
-			spending = spending || new Spending();	
-			
-			spending.save(
-				spendingData, 
-				{
-					success: function(model, response, options){
-						if(spending.isNew())
-						{
-							spending.set('id', response.spendingId);
-						}
-					},
-					error: myWallet.processAjaxError
-				}
-			);
-			
-			this.trigger('spending:save:success');
+		var spending = this._getSpendings().get(spendingId);
+		spending = spending || new Spending();	
 
-			this._getSpendings().add(spending);
-			this.render();
-		}
-		catch(e)
-		{
-			myWallet.errorMsg(e);
-		}
+		spending.save(
+			spendingData, 
+			{
+				success: function(model, response, options){
+					if(spending.isNew())
+					{
+						spending.set('id', response.spendingId);
+					}
+				},
+				error: function(model, xhr, options){ myWallet.processAjaxError(xhr, null, null) }
+			}
+		);
+
+		this.trigger('spending:save:success');
+
+		this._getSpendings().add(spending);
+		this.render();
 	},
 	
 	sortSpendings: function(event)

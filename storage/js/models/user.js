@@ -67,11 +67,7 @@ var User = Backbone.Model.extend({
 			{
 				myWallet.router.navigate("login", {trigger: true});
 			},
-			error: function(data)
-			{
-				var msg = myWallet.getErrorMessage($.parseJSON(data.responseText).code);
-				myWallet.errorMsg(msg);
-			}
+			error: myWallet.processAjaxError
 		});
 	},
 	
@@ -102,11 +98,7 @@ var User = Backbone.Model.extend({
 				}
 				result = true;
 			},
-			error: function(data)
-			{
-				var msg = myWallet.getErrorMessage($.parseJSON(data.responseText).code);
-				myWallet.errorMsg(msg);
-			}
+			error: myWallet.processAjaxError
 		});
 		
 		return result;

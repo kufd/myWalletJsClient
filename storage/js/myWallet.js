@@ -5,6 +5,7 @@ var myWallet = {
 	apiBaseUrl: 'http://my-wallet-js-client/v1',
 	router: null,
 	errors:{},
+	lastException: null,
 };
 
 
@@ -12,6 +13,8 @@ var myWallet = {
 
 myWallet.init = function()
 {
+	this._initErrorHandler();
+	
 	this.templates = new Object();
 	this.views = new Object();
 	
@@ -78,6 +81,14 @@ myWallet.init = function()
 	this._loginUser();
 }
 
+myWallet._initErrorHandler = function()
+{
+	window.onerror = function(msg, url, lineNumber){
+		errorMsg = myWallet.lastException instanceof Exception ? myWallet.lastException.getMessage() : myWallet.getErrorMessage(myWallet.errors.UNKNOWN);
+		myWallet.lastException = null;
+		myWallet.errorMsg(errorMsg);
+	}
+}
 
 myWallet._initUser = function()
 {
@@ -86,14 +97,7 @@ myWallet._initUser = function()
 
 myWallet._loginUser = function()
 {
-	try
-	{
-		this.user.loginWithSavedLoginData();
-	}
-	catch(e)
-	{
-		myWallet.errorMsg(e);
-	}
+	this.user.loginWithSavedLoginData();
 }
 
 myWallet.isUserLoggedIn = function()
@@ -136,19 +140,25 @@ myWallet.processAjaxError = function(jqXHR, textStatus, errorThrown)
 {
 	if(jqXHR.status == 502)
 	{
-		throw myWallet.getErrorMessage(myWallet.errors.CONNECTION);
+		myWallet.lastException = new Exception(myWallet.getErrorMessage(myWallet.errors.CONNECTION), myWallet.errors.CONNECTION);
+	}
+	else if(jqXHR.status == 401)
+	{
+		myWallet.lastException = new Exception(myWallet.getErrorMessage(myWallet.errors.UNAUTHORIZED), myWallet.errors.UNAUTHORIZED);
 	}
 	else
 	{
 		try
 		{
-			throw myWallet.getErrorMessage($.parseJSON(data.responseText).code);
+			myWallet.lastException = new Exception(myWallet.getErrorMessage($.parseJSON(jqXHR.responseText).code), $.parseJSON(jqXHR.responseText).code);
 		}
 		catch(e)
 		{
-			throw myWallet.getErrorMessage(myWallet.errors.UNKNOWN);
+			myWallet.lastException = new Exception(myWallet.getErrorMessage(myWallet.errors.UNKNOWN), myWallet.errors.UNKNOWN);
 		}
 	}
+	
+	throw myWallet.lastException;
 }
 
 myWallet.getAuthHeader = function(login, password)

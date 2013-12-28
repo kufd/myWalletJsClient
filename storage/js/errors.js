@@ -21,10 +21,29 @@
 		115 : 'Сума витрати має бути числом',
 		116 : 'Не задана дата для витрати',
 		
+		117 : 'Неправильний логін або пароль',
+		
 		UNKNOWN: 1,
 		CONNECTION: 11,
+		UNAUTHORIZED: 117,
 	};
 	
 	myWallet.setErrors(errors);
 	
 })();
+
+var Exception = function(message, code)
+{
+	var code;
+	var message;
+	
+	this.getMessage = function()
+	{
+		return message;
+	}
+	
+	this.getCode = function()
+	{
+		return code;
+	}
+}
