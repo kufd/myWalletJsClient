@@ -138,25 +138,34 @@ myWallet.getErrorMessage = function(code)
  */
 myWallet.processAjaxError = function(jqXHR, textStatus, errorThrown)
 {
+	var exception;
+	
 	if(jqXHR.status == 502)
 	{
-		myWallet.lastException = new Exception(myWallet.getErrorMessage(myWallet.errors.CONNECTION), myWallet.errors.CONNECTION);
+		exception = new Exception(myWallet.getErrorMessage(myWallet.errors.CONNECTION), myWallet.errors.CONNECTION);
 	}
 	else if(jqXHR.status == 401)
 	{
-		myWallet.lastException = new Exception(myWallet.getErrorMessage(myWallet.errors.UNAUTHORIZED), myWallet.errors.UNAUTHORIZED);
+		exception = new Exception(myWallet.getErrorMessage(myWallet.errors.UNAUTHORIZED), myWallet.errors.UNAUTHORIZED);
 	}
 	else
 	{
 		try
 		{
-			myWallet.lastException = new Exception(myWallet.getErrorMessage($.parseJSON(jqXHR.responseText).code), $.parseJSON(jqXHR.responseText).code);
+			exception = new Exception(myWallet.getErrorMessage($.parseJSON(jqXHR.responseText).code), $.parseJSON(jqXHR.responseText).code);
 		}
 		catch(e)
 		{
-			myWallet.lastException = new Exception(myWallet.getErrorMessage(myWallet.errors.UNKNOWN), myWallet.errors.UNKNOWN);
+			exception = new Exception(myWallet.getErrorMessage(myWallet.errors.UNKNOWN), myWallet.errors.UNKNOWN);
 		}
 	}
+	
+	myWallet.throwException(exception);
+}
+
+myWallet.throwException = function(exception)
+{
+	myWallet.lastException = exception;
 	
 	throw myWallet.lastException;
 }

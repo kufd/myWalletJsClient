@@ -5,7 +5,13 @@ var LoginView = Backbone.View.extend({
 	template: myWallet.templates.login,
 	
 	events: {
-		"click div.login .submit input": "login"
+		"click div.login .submit input": "login",
+		"keyup div.login div.form table": function(event){
+			if (event.which == 13) 
+			{
+				this.login();
+			} 
+		}
 	},
 	
 	initialize: function () {
@@ -30,6 +36,17 @@ var LoginView = Backbone.View.extend({
 	},
 	
 	login: function(){
+		
+		if(!this.$("input[name=login]").val())
+		{
+			myWallet.throwException(new Exception('Введіть логін'));
+		}
+		
+		if(!this.$("input[name=password]").val())
+		{
+			myWallet.throwException(new Exception('Введіть пароль'));
+		}
+		
 		myWallet.user.login(
 			this.$("input[name=login]").val(), 
 			this.$("input[name=password]").val(),
