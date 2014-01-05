@@ -10,12 +10,15 @@ def minify(file_list, result_file, type):
     tmp_file_minified = tempfile.gettempdir()  + '/' + str(uuid.uuid4())
     tmp_file_compressed = tempfile.gettempdir()  + '/' + str(uuid.uuid4())
 
-    command = 'cat ' + (' '.join(file_list)) + ' > ' + tmp_file_concated 
-    command += ' && java -jar ' + minifier_home_dir + '/yuicompressor-2.4.8.jar --type=' + type + ' ' + tmp_file_concated + ' -o ' + tmp_file_minified
+    command = 'cat ' + (' '.join(file_list)) + ' > ' + tmp_file_concated
+    if args.minify: 
+        command += ' && java -jar ' + minifier_home_dir + '/yuicompressor-2.4.8.jar --type=' + type + ' ' + tmp_file_concated + ' -o ' + tmp_file_minified
+    else:
+        command += ' && cp ' + tmp_file_concated + ' ' + tmp_file_minified
     if args.compress:
         command += ' && gzip -6 -c ' + tmp_file_minified + ' > ' + tmp_file_compressed
     else:
-         command += ' && cp ' + tmp_file_minified + ' ' + tmp_file_compressed
+        command += ' && cp ' + tmp_file_minified + ' ' + tmp_file_compressed
     command += ' && mv ' + tmp_file_compressed + ' ' + result_file
     command += ' && rm -f ' + tmp_file_concated + ' ' + tmp_file_minified
 
@@ -47,6 +50,11 @@ argsParser.add_argument(
 );
 argsParser.add_argument(
     '--compress',
+    help = 'Compress file',
+    action='store_true'
+);
+argsParser.add_argument(
+    '--minify',
     help = 'Compress file',
     action='store_true'
 );

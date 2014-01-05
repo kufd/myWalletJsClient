@@ -175,5 +175,5 @@ myWallet.getAuthHeader = function(login, password)
 	login = login ? login : this.user.get('login');
 	password = password ? password : this.user.get('password');
 	return {"Authorization": "Basic " + btoa(login+":"+password)};
-}
+};
 
