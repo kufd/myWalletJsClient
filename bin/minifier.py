@@ -86,7 +86,7 @@ for link in soup.findAll('link'):
 #minification
 result_file_js = args.result_dir + '/' + str(int(time.time())) + '.js'
 result_file_css = args.result_dir + '/' + str(int(time.time())) + '.css'
-if compress:
+if args.compress:
     result_file_js += '.gz'
     result_file_css += '.gz'
     
