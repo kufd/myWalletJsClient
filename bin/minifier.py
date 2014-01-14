@@ -10,11 +10,21 @@ def minify(file_list, result_file, type):
     tmp_file_minified = tempfile.gettempdir()  + '/' + str(uuid.uuid4())
     tmp_file_compressed = tempfile.gettempdir()  + '/' + str(uuid.uuid4())
 
-    command = 'cat ' + (' '.join(file_list)) + ' > ' + tmp_file_concated
+    #concat files
+    content = ''
+    for file in file_list:
+        if type == 'js' and content != '':
+            content += ";\n"
+        content += open(file, 'r').read()
+    file = open(tmp_file_concated, "w")
+    file.write(content)
+    file.close()
+        
+    command = ''
     if args.minify: 
-        command += ' && java -jar ' + minifier_home_dir + '/yuicompressor-2.4.8.jar --type=' + type + ' ' + tmp_file_concated + ' -o ' + tmp_file_minified
+        command += 'java -jar ' + minifier_home_dir + '/yuicompressor-2.4.8.jar --type=' + type + ' ' + tmp_file_concated + ' -o ' + tmp_file_minified
     else:
-        command += ' && cp ' + tmp_file_concated + ' ' + tmp_file_minified
+        command += 'cp ' + tmp_file_concated + ' ' + tmp_file_minified
     if args.compress:
         command += ' && gzip -6 -c ' + tmp_file_minified + ' > ' + tmp_file_compressed
     else:
