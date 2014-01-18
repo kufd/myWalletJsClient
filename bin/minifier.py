@@ -4,8 +4,10 @@ import argparse
 from bs4 import BeautifulSoup
 import tempfile
 import uuid
+import re
 
-def minify(file_list, result_file, type):
+
+def minify(file_list, result_file, type, args):
     tmp_file_concated = tempfile.gettempdir()  + '/' + str(uuid.uuid4())
     tmp_file_minified = tempfile.gettempdir()  + '/' + str(uuid.uuid4())
     tmp_file_compressed = tempfile.gettempdir()  + '/' + str(uuid.uuid4())
@@ -13,9 +15,19 @@ def minify(file_list, result_file, type):
     #concat files
     content = ''
     for file in file_list:
+        
         if type == 'js' and content != '':
             content += ";\n"
-        content += open(file, 'r').read()
+            
+        tmp_content = open(file, 'r').read()
+        
+        #replace relative pathes to absolute in css files
+        if type == 'css':
+            path = os.path.dirname(file).replace(args.root_dir, '')
+            tmp_content = re.sub(r'url\((([^/\\(http://)]{1})[^)]+)\)', 'url('+path+'/\g<1>)', tmp_content, flags=re.IGNORECASE)
+        
+        content += tmp_content
+        
     file = open(tmp_file_concated, "w")
     file.write(content)
     file.close()
@@ -85,9 +97,9 @@ for script in soup.findAll('script'):
     if script.get('type') == 'text/javascript':
         js_file = script.get('src');
         if js_file[0] == '/':
-            js_file = js_file[1:]
+            js_file = args.root_dir + js_file
         else:
-            js_file = os.path.dirname(file) + '/' + js_file
+            js_file = os.path.dirname(args.file) + '/' + js_file
         js_files.append(js_file);
         script.decompose();
             
@@ -95,9 +107,9 @@ for link in soup.findAll('link'):
     if 'stylesheet' in link.get('rel'):
         css_file = link.get('href');
         if css_file[0] == '/':
-            css_file = css_file[1:]
+            css_file = args.root_dir + css_file
         else:
-            css_file = os.path.dirname(file) + '/' + css_file
+            css_file = os.path.dirname(args.file) + '/' + css_file
         css_files.append(css_file);
         link.decompose();
      
@@ -107,9 +119,9 @@ result_file_css = args.result_dir + '/' + str(int(time.time())) + '.css'
 if args.compress:
     result_file_js += '.gz'
     result_file_css += '.gz'
-    
-minify(js_files, result_file_js, 'js')
-minify(css_files, result_file_css, 'css')
+
+minify(js_files, result_file_js, 'js', args)
+minify(css_files, result_file_css, 'css', args)
 
 #append minified files with js and css
 script_tag = soup.new_tag("script", type="text/javascript", src='/' + result_file_js)
