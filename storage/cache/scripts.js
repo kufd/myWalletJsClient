@@ -28094,7 +28094,7 @@ var myWallet = {
 	templates:{},
 	views:{},
 	user:null,
-	apiBaseUrl: 'http://my-wallet-js-client/v1',
+	apiBaseUrl: 'v1',
 	router: null,
 	errors:{},
 	lastException: null,
