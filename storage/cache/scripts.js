@@ -28124,6 +28124,8 @@ myWallet.init = function()
 	this.views.spendings = new SpendingsView();
 	this.views.profile = new ProfileView();
 	this.views.formAddSpending = new FormAddSpendingView();
+	this.views.reports = new ReportsView();
+	this.views.reportGroupBySpengingName = new ReportGroupBySpengingNameView();
 	
 	this.views.main.initAfterEvrithing();
 	
@@ -28138,6 +28140,8 @@ myWallet.init = function()
 			"forgotPassword": "forgotPassword",
 			"spendings": "spendings",
 			"profile": "profile",
+			"reports": "reports",
+			"reportGroupBySpengingName": "reportGroupBySpengingName",
 		},
 
 		login: function() {
@@ -28162,6 +28166,14 @@ myWallet.init = function()
 
 		profile: function() {
 			myWallet.views.profile.render();
+		},
+		
+		reports: function() {
+			myWallet.views.reports.render();
+		},
+		
+		reportGroupBySpengingName: function() {
+			myWallet.views.reportGroupBySpengingName.render();
 		}
 
 	});
@@ -28621,6 +28633,7 @@ myWallet.templates.main = _.template(
 		</div>\
 		<div id="menu">\
 			<ul>\
+				<li><a href="#reports" class="reports">Звіти</a></li>\
 				<li><a href="#spendings" class="spendings">Гаманець</a></li>\
 				<li><a href="#profile" class="profile">Профіль</a></li>\
 				<li><a href="#" class="controlPanel">Адмін-панель</a></li>\
@@ -28948,6 +28961,35 @@ myWallet.templates.formAddSpending =
 	</div>';
 
 
+
+myWallet.templates.reports =
+	'<div class="reports">\
+\
+		<ul>\
+			<li><a href="#reportGroupBySpengingName">Сума по витратах</a></li>\
+		</ul>\
+\
+	</div>';
+
+
+
+myWallet.templates.reportGroupBySpengingName = 
+	'<div class="reportGroupBySpengingName">\
+\
+		<h2>Звіт: сума по витратах</h2>\
+		<div class="tool_panel">\
+			Період: \
+			<input name="dateBeginFront" type="text">\
+			<input type="hidden" name="dateBegin" />\
+			&mdash;\
+			<input name="dateEndFront" type="text">\
+			<input type="hidden" name="dateEnd" />\
+		</div>\
+\
+	</div>';
+
+
+
 var MainView = Backbone.View.extend({
 	el: 'body',
 	template: myWallet.templates.main,
@@ -28978,7 +29020,7 @@ var MainView = Backbone.View.extend({
 			'render', 
 			function(){ 
 				view.$('a.spendings, a.login').hide();
-				view.$('a.logout, a.profile').show();
+				view.$('a.reports, a.logout, a.profile').show();
 			}
 		);
 		
@@ -29009,7 +29051,7 @@ var MainView = Backbone.View.extend({
 			'render', 
 			function(){ 
 				view.$('a.login, a.profile').hide();
-				view.$('a.logout, a.spendings').show();
+				view.$('a.reports, a.logout, a.spendings').show();
 			}
 		);
 		
@@ -29018,6 +29060,14 @@ var MainView = Backbone.View.extend({
 			function(){ 
 				view.$('a.profile, a.logout, a.spendings').hide();
 				view.$('a.login').show();
+			}
+		);
+
+		myWallet.views.reports.bind(
+			'render', 
+			function(){ 
+				view.$('a.reports, a.login').hide();
+				view.$('a.spendings, a.logout, a.profile').show();
 			}
 		);
 	}
@@ -29459,6 +29509,46 @@ var FormAddSpendingView = Backbone.View.extend({
 				});
 			}
 		});
+	}
+});
+
+
+var ReportsView = Backbone.View.extend({
+	el: '#page',
+	template: myWallet.templates.reports,
+	
+	initialize: function () {
+		
+    },
+    
+    render: function () {
+		if(myWallet.isUserLoggedIn())
+		{
+			var template = _.template(this.template);
+			this.$el.html(template);
+			
+			this.trigger('render');
+		}
+	}
+});
+
+
+var ReportGroupBySpengingNameView = Backbone.View.extend({
+	el: '#page',
+	template: myWallet.templates.reportGroupBySpengingName,
+	
+	initialize: function () {
+		
+    },
+    
+    render: function () {
+		if(myWallet.isUserLoggedIn())
+		{
+			var template = _.template(this.template);
+			this.$el.html(template);
+			
+			this.trigger('render');
+		}
 	}
 });
 

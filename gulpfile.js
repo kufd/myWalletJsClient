@@ -46,6 +46,8 @@ gulp.task('scripts', function() {
 		"storage/js/templates/spendings.js",
 		"storage/js/templates/profile.js",
 		"storage/js/templates/formAddSpending.js",
+		"storage/js/templates/reports.js",
+		"storage/js/templates/reportGroupBySpengingName.js",
 		"storage/js/views/main.js",
 		"storage/js/views/login.js",
 		"storage/js/views/about.js",
@@ -54,6 +56,8 @@ gulp.task('scripts', function() {
 		"storage/js/views/spendings.js",
 		"storage/js/views/profile.js",
 		"storage/js/views/formAddSpending.js",
+		"storage/js/views/reports.js",
+		"storage/js/views/reportGroupBySpengingName.js",
 	])
     .pipe(concat('scripts.js'))
     .pipe(gulp.dest('storage/cache'))

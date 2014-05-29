@@ -32,6 +32,8 @@ myWallet.init = function()
 	this.views.spendings = new SpendingsView();
 	this.views.profile = new ProfileView();
 	this.views.formAddSpending = new FormAddSpendingView();
+	this.views.reports = new ReportsView();
+	this.views.reportGroupBySpengingName = new ReportGroupBySpengingNameView();
 	
 	this.views.main.initAfterEvrithing();
 	
@@ -46,6 +48,8 @@ myWallet.init = function()
 			"forgotPassword": "forgotPassword",
 			"spendings": "spendings",
 			"profile": "profile",
+			"reports": "reports",
+			"reportGroupBySpengingName": "reportGroupBySpengingName",
 		},
 
 		login: function() {
@@ -70,6 +74,14 @@ myWallet.init = function()
 
 		profile: function() {
 			myWallet.views.profile.render();
+		},
+		
+		reports: function() {
+			myWallet.views.reports.render();
+		},
+		
+		reportGroupBySpengingName: function() {
+			myWallet.views.reportGroupBySpengingName.render();
 		}
 
 	});

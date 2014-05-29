@@ -28,7 +28,7 @@ var MainView = Backbone.View.extend({
 			'render', 
 			function(){ 
 				view.$('a.spendings, a.login').hide();
-				view.$('a.logout, a.profile').show();
+				view.$('a.reports, a.logout, a.profile').show();
 			}
 		);
 		
@@ -59,7 +59,7 @@ var MainView = Backbone.View.extend({
 			'render', 
 			function(){ 
 				view.$('a.login, a.profile').hide();
-				view.$('a.logout, a.spendings').show();
+				view.$('a.reports, a.logout, a.spendings').show();
 			}
 		);
 		
@@ -68,6 +68,14 @@ var MainView = Backbone.View.extend({
 			function(){ 
 				view.$('a.profile, a.logout, a.spendings').hide();
 				view.$('a.login').show();
+			}
+		);
+
+		myWallet.views.reports.bind(
+			'render', 
+			function(){ 
+				view.$('a.reports, a.login').hide();
+				view.$('a.spendings, a.logout, a.profile').show();
 			}
 		);
 	}

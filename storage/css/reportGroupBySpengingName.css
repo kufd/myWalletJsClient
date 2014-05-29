@@ -1,0 +1,22 @@
+div.reportGroupBySpengingName
+{
+	min-height:500px;
+}
+div.reportGroupBySpengingName h2
+{
+}
+
+div.reportGroupBySpengingName div.tool_panel
+{
+	padding: 10px 0px;
+}
+
+div.reportGroupBySpengingName div.tool_panel input
+{
+	width:110px;
+	cursor:pointer;
+}
+
+
+
+
