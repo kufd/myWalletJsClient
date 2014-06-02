@@ -37,6 +37,7 @@ gulp.task('scripts', function() {
 		"storage/js/models/spendingsTop.js",
 		"storage/js/models/user.js",
 		"storage/js/models/spending.js",
+		"storage/js/models/reportGroupBySpengingName.js",
 		"storage/js/collections/spendings.js",
 		"storage/js/templates/main.js",
 		"storage/js/templates/login.js",

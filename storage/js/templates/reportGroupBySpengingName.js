@@ -12,6 +12,40 @@ myWallet.templates.reportGroupBySpengingName =
 			<input type="hidden" name="dateEnd" />\
 		</div>\
 \
+		<table class="spendings">\
+		<tr>\
+			<th class="spendingName">\
+				<div data-field="spendingName" class="<%=sortOptions.field == "spendingName" ? sortOptions.direction : ""%>">Витрата</div>\
+			</th>\
+			<th class="amount">\
+				<div data-field="amount" class="<%=sortOptions.field == "amount" ? sortOptions.direction : ""%>">Сума</div>\
+			</th>\
+		</tr>\
+\
+		<% var sum = 0; %>\
+		<% for (var key in data) { %>\
+			<% spending = data[key]; %>\
+			<% sum+=parseInt(spending.amount*100); %>\
+			<tr>\
+				<td class="spendingName">\
+					<%=spending.spendingName%>\
+				</td>\
+				<td class="amount">\
+					<%=spending.amount%>  <%=user.get("currency")%>\
+				</td>\
+			</tr>\
+		<% } %>\
+\
+		<tr class="sum">\
+			<td class="spendingName">\
+				Загальна сума\
+			</td>\
+			<td class="amount">\
+				<%=sum/100%> <%=user.get("currency")%>\
+			</td>\
+		</tr>\
+		</table>\
+\
 	</div>';
 
 

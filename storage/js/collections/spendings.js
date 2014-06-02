@@ -43,8 +43,8 @@ var Spendings = Backbone.Collection.extend({
 		
 		if(this.sortOptions.field == 'amount')
 		{
-			val1 = parseInt(val1);
-			val2 = parseInt(val2);
+			val1 = parseFloat(val1);
+			val2 = parseFloat(val2);
 		}
 		
 		if(val1 > val2 || val1 == val2 && id1 > id2)

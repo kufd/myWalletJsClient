@@ -28557,6 +28557,87 @@ var Spending = Backbone.Model.extend({
 	}
 });
 
+var reportGroupBySpengingName = {
+	
+	_data: null,
+	_url: myWallet.apiBaseUrl + '/reports/group-by-spending-name/',
+	_sortOptions: {'field': 'amount', 'direction': 'desc'},
+	_dateBegin: null,
+	_dateEnd: null,
+	
+	_loadData: function()
+	{
+		var report = this;
+
+		$.ajax({
+			type: "GET",
+			url: this._url,
+			async: false,
+			headers: myWallet.getAuthHeader(),
+			data: {dateBegin: this._dateBegin, dateEnd: this._dateEnd},
+			dataType: 'json',
+			success: function(data)
+			{
+				report._data = data.data;
+				report._sort();
+			},
+			error: myWallet.processAjaxError
+		});
+	},
+	
+	_sort: function()
+	{
+		this._data = _.sortBy(this._data, this.getSortOptions().field);
+		
+		if(this.getSortOptions().direction == 'desc')
+		{
+			this._data = this._data.reverse();
+		}
+	},
+		
+	setSortOptions: function(sortOptions)
+	{
+		this._sortOptions = sortOptions;
+		this._sort();
+	},
+	
+	setDateBegin: function(dateBegin)
+	{
+		this._data = null;
+		this._dateBegin = dateBegin;
+	},
+	
+	setDateEnd: function(dateEnd)
+	{
+		this._data = null;
+		this._dateEnd = dateEnd;
+	},
+	
+	getSortOptions: function()
+	{
+		return this._sortOptions;
+	},
+	
+	getDateBegin: function()
+	{
+		return  this._dateBegin;
+	},
+	
+	getDateEnd: function()
+	{
+		return this._dateEnd;
+	},
+	
+	getData: function()
+	{
+		if(this._data == null)
+		{
+			this._loadData();
+		}
+		
+		return this._data;
+	}
+}
 
 var Spendings = Backbone.Collection.extend({
 	model: Spending,
@@ -28602,8 +28683,8 @@ var Spendings = Backbone.Collection.extend({
 		
 		if(this.sortOptions.field == 'amount')
 		{
-			val1 = parseInt(val1);
-			val2 = parseInt(val2);
+			val1 = parseFloat(val1);
+			val2 = parseFloat(val2);
 		}
 		
 		if(val1 > val2 || val1 == val2 && id1 > id2)
@@ -28985,6 +29066,40 @@ myWallet.templates.reportGroupBySpengingName =
 			<input name="dateEndFront" type="text">\
 			<input type="hidden" name="dateEnd" />\
 		</div>\
+\
+		<table class="spendings">\
+		<tr>\
+			<th class="spendingName">\
+				<div data-field="spendingName" class="<%=sortOptions.field == "spendingName" ? sortOptions.direction : ""%>">Витрата</div>\
+			</th>\
+			<th class="amount">\
+				<div data-field="amount" class="<%=sortOptions.field == "amount" ? sortOptions.direction : ""%>">Сума</div>\
+			</th>\
+		</tr>\
+\
+		<% var sum = 0; %>\
+		<% for (var key in data) { %>\
+			<% spending = data[key]; %>\
+			<% sum+=parseInt(spending.amount*100); %>\
+			<tr>\
+				<td class="spendingName">\
+					<%=spending.spendingName%>\
+				</td>\
+				<td class="amount">\
+					<%=spending.amount%>  <%=user.get("currency")%>\
+				</td>\
+			</tr>\
+		<% } %>\
+\
+		<tr class="sum">\
+			<td class="spendingName">\
+				Загальна сума\
+			</td>\
+			<td class="amount">\
+				<%=sum/100%> <%=user.get("currency")%>\
+			</td>\
+		</tr>\
+		</table>\
 \
 	</div>';
 
@@ -29536,19 +29651,92 @@ var ReportsView = Backbone.View.extend({
 var ReportGroupBySpengingNameView = Backbone.View.extend({
 	el: '#page',
 	template: myWallet.templates.reportGroupBySpengingName,
+	report: null,
+	
+	events: {
+		"click div.reportGroupBySpengingName table.spendings th div": "sortSpendings",
+	},
 	
 	initialize: function () {
+		this.report = reportGroupBySpengingName;
 		
+		this.report.setDateBegin($.datepicker.formatDate('yy-mm-01', new Date()));
+		this.report.setDateEnd($.datepicker.formatDate('yy-mm-'+this.countDaysOfMont(), new Date()));
     },
+	
+	countDaysOfMont: function()
+    {
+    	var date = new Date();
+    	return new Date(date.getFullYear(), date.getMonth() + 1, 0).getDate();
+    },
+	
+	sortSpendings: function(event)
+	{
+		var field = $(event.target).attr('data-field');
+		var sortOptions = this.report.getSortOptions();
+		
+		if(sortOptions.field == field)
+		{
+			sortOptions.direction = sortOptions.direction == 'asc' ? 'desc' : 'asc';
+		}
+		else
+		{
+			sortOptions.direction = 'desc';
+			sortOptions.field = field;
+		}
+		
+		this.report.setSortOptions(sortOptions);
+		
+		this.render();
+	},
     
     render: function () {
 		if(myWallet.isUserLoggedIn())
 		{
-			var template = _.template(this.template);
+			var template = _.template(
+				this.template,
+				{
+					data: this.report.getData(), 
+					user: myWallet.user,
+					sortOptions: this.report.getSortOptions()
+				}
+			);
 			this.$el.html(template);
+			
+			//---------------- initializing tool panel ---------------
+			var view = this;
+			this.$("input[name=dateBegin]").val(this.report.getDateBegin());
+			this.$("input[name=dateBeginFront]")
+			.val($.datepicker.formatDate('d GG yy', new Date(this.report.getDateBegin())))
+			.datepicker({
+				dateFormat:'d GG yy',
+				altField: this.$("input[name=dateBegin]"),
+				altFormat: "yy-mm-dd",
+				onClose: function(){
+					view.report.setDateBegin(view.$("input[name=dateBegin]").val())
+					
+					view.render();
+				}
+			});
+			
+			this.$("input[name=dateEnd]").val(this.report.getDateEnd());
+			this.$("input[name=dateEndFront]")
+			.val($.datepicker.formatDate('d GG yy', new Date(this.report.getDateEnd())))
+			.datepicker({
+				dateFormat:'d GG yy',
+				altField: this.$("input[name=dateEnd]"),
+				altFormat: "yy-mm-dd",
+				onClose: function(){
+					view.report.setDateEnd(view.$("input[name=dateEnd]").val())
+					
+					view.render();
+				}
+			});
+			//-------------------
 			
 			this.trigger('render');
 		}
 	}
+	
 });
 

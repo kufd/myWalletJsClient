@@ -8,7 +8,7 @@ div.reportGroupBySpengingName h2
 
 div.reportGroupBySpengingName div.tool_panel
 {
-	padding: 10px 0px;
+	padding: 10px 0px 30px;
 }
 
 div.reportGroupBySpengingName div.tool_panel input
@@ -17,6 +17,67 @@ div.reportGroupBySpengingName div.tool_panel input
 	cursor:pointer;
 }
 
+
+div.reportGroupBySpengingName table.spendings
+{
+	border-collapse: collapse;
+}
+div.reportGroupBySpengingName table.spendings tr:hover td
+{
+	background-color:#F7F0DC;
+}
+div.reportGroupBySpengingName table.spendings tr.sum:hover td
+{
+	background-color:white;
+}
+div.reportGroupBySpengingName table.spendings td
+{
+	padding:5px;
+	border-bottom:1px solid #dedede;
+	color:black;
+	font-size:13px;
+}
+div.reportGroupBySpengingName table.spendings tr.sum td
+{
+	padding-top:15px;
+	font-weight:bold;
+	border:none;
+}
+div.reportGroupBySpengingName table.spendings th
+{
+	text-align:left;
+	padding-bottom:10px;
+	padding-left:5px;
+}
+
+div.reportGroupBySpengingName table.spendings th.spendingName
+{
+	width:200px;
+}
+div.reportGroupBySpengingName table.spendings th.amount
+{
+	width:150px;
+}
+div.reportGroupBySpengingName table.spendings th div
+{
+	cursor:pointer;
+}
+div.reportGroupBySpengingName table.spendings th div.asc
+{
+	background-image: url(/storage/images/icons/20/asc.png);
+	background-position: right;
+	padding-right:20px;
+	background-repeat: no-repeat;
+	display: inline-block;
+}
+div.reportGroupBySpengingName table.spendings th div.desc
+{
+	background-image: url(/storage/images/icons/20/desc.png);
+	background-position: right;
+	padding-right:20px;
+	background-repeat: no-repeat;
+	display: inline-block;
+}
 
 
 
