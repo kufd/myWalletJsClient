@@ -3,6 +3,7 @@ var myWallet = {
 	views:{},
 	user:null,
 	apiBaseUrl: '/v1',
+	apiJsErrorsUrl: '/jsErrors',
 	router: null,
 	errors:{},
 	lastException: null,
@@ -99,7 +100,34 @@ myWallet._initErrorHandler = function()
 		errorMsg = myWallet.lastException instanceof Exception ? myWallet.lastException.getMessage() : myWallet.getErrorMessage(myWallet.errors.UNKNOWN);
 		myWallet.lastException = null;
 		myWallet.errorMsg(errorMsg);
+		
+		var errorData = {
+			msg: msg,
+			lineNumber: lineNumber,
+			usersMsg : errorMsg,
+			pageUrl: document.URL,
+			scriptUrl: url,
+			user: myWallet.user ? myWallet.user.get('login') : null,
+			date: myWallet.now(),
+			userAgent: navigator.userAgent
+		};
+			
+		$.ajax({
+			type: "POST",
+			url: myWallet.apiJsErrorsUrl,
+			async: true,
+			contentType: 'application/json',
+			data: JSON.stringify(errorData)
+		});
+		
 	}
+}
+
+myWallet.now = function()
+{
+	var now = new Date(); 
+	
+	return $.datepicker.formatDate('yy-mm-dd', now) + " " + now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds();
 }
 
 myWallet._initUser = function()

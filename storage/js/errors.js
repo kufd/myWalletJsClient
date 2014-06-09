@@ -32,6 +32,7 @@
 	
 })();
 
+
 var Exception = function(message, code)
 {
 	var code;
@@ -47,3 +48,6 @@ var Exception = function(message, code)
 		return code;
 	}
 }
+
+Exception.prototype = new Error();
+Exception.prototype.constructor = Exception;
