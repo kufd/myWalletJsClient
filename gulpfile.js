@@ -24,6 +24,7 @@ gulp.task('styles', function() {
 
 gulp.task('scripts', function() {
 	return gulp.src([
+		"storage/js/libs/jquery-ui-datepicker-*.js",
 		"storage/js/myWallet.js",
 		"storage/js/translations/*",
 		"storage/js/errors.js",
