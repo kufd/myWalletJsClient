@@ -7,6 +7,9 @@ var myWallet = {
 	router: null,
 	errors:{},
 	lastException: null,
+	availableLanguages: ['ua', 'en'],
+	translator: new Polyglot(),
+	translations:{},
 };
 
 
@@ -15,10 +18,7 @@ var myWallet = {
 myWallet.init = function()
 {
 	this._initErrorHandler();
-	
-	this.templates = new Object();
-	this.views = new Object();
-	
+		
 	this._initUser();
 	
 	spendingsTop.initialize();
@@ -90,8 +90,6 @@ myWallet.init = function()
 	this.router = new Router();
 	
 	Backbone.history.start();
-
-	this._loginUser();
 }
 
 myWallet._initErrorHandler = function()
@@ -127,17 +125,55 @@ myWallet.now = function()
 {
 	var now = new Date(); 
 	
-	return $.datepicker.formatDate('yy-mm-dd', now) + " " + now.getHours() + ":" + now.getMinutes() + ":" + now.getSeconds();
+	return $.datepicker.formatDate('yy-mm-dd', now) + " " + now.getHours() + ":" + now.getMinutes() + ":" + ("0" + now.getSeconds()).slice(-2);
+}
+
+/**
+ * Method for translation
+ * 
+ * @param string text
+ * @returns string
+ */
+myWallet.t = function(text)
+{
+	return this.translator.t(text);
+}
+
+myWallet.reloadTranslation = function()
+{
+	this._setLangSettings();
+	
+	//reload main view and set new root alements for all other views
+	this.views.main.render();
+	
+	for (var viewName in this.views)
+	{
+		if(viewName != 'main')
+		{
+			this.views[viewName].setElement('#page');
+		}
+	}
+
+	//reload current view
+	//this hardcode i use to change anchor because render menthod is not called if anchor was not changed
+	var fragment = document.location.hash.slice(1);
+	this.router.navigate('reports');
+	this.router.navigate(fragment, {trigger: true});
 }
 
 myWallet._initUser = function()
 {
 	this.user = new User();
-},
-
-myWallet._loginUser = function()
-{
+	
 	this.user.loginWithSavedLoginData();
+	
+	this._setLangSettings();
+}
+
+myWallet._setLangSettings = function()
+{
+	this.translator.extend(this.translations[this.user.get('lang')]);
+	$.datepicker.setDefaults($.datepicker.regional[this.user.get('lang')]);
 }
 
 myWallet.isUserLoggedIn = function()

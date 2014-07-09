@@ -3,17 +3,17 @@ myWallet.templates.main = _.template(
 	'<!-- start header -->\
 	<div id="header">\
 		<div id="logo">\
-			<h1><a href="#spendings">Мій гаманець<sup></sup></a></h1>\
+			<h1><a href="#spendings"><%=myWallet.t("Мій гаманець")%><sup></sup></a></h1>\
 			<h2></h2>\
 		</div>\
 		<div id="menu">\
 			<ul>\
-				<li><a href="#reports" class="reports">Звіти</a></li>\
-				<li><a href="#spendings" class="spendings">Гаманець</a></li>\
-				<li><a href="#profile" class="profile">Профіль</a></li>\
-				<li><a href="#" class="controlPanel">Адмін-панель</a></li>\
-				<li><a href="#login" class="login">Вхід</a></li>\
-				<li><a href="#" class="logout">Вихід</a></li>\
+				<li><a href="#reports" class="reports"><%=myWallet.t("Звіти")%></a></li>\
+				<li><a href="#spendings" class="spendings"><%=myWallet.t("Гаманець")%></a></li>\
+				<li><a href="#profile" class="profile"><%=myWallet.t("Профіль")%></a></li>\
+				<li><a href="#" class="controlPanel"><%=myWallet.t("Адмін-панель")%></a></li>\
+				<li><a href="#login" class="login"><%=myWallet.t("Вхід")%></a></li>\
+				<li><a href="#" class="logout"><%=myWallet.t("Вихід")%></a></li>\
 			</ul>\
 		</div>\
 	</div>\

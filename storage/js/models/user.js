@@ -9,7 +9,7 @@ var User = Backbone.Model.extend({
 		name: null,
 		email: null,
 		role: null,
-		lang: null,
+		lang: 'en',
 		currency: null,
 		useEncryption: null,
 		authorized: false

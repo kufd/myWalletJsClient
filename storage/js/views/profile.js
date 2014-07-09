@@ -9,7 +9,7 @@ var ProfileView = Backbone.View.extend({
 	render: function () {
 		if(myWallet.isUserLoggedIn())
 		{
-			var template = _.template(this.template, {user: myWallet.user});
+			var template = _.template(this.template, {user: myWallet.user, availableLanguages: myWallet.availableLanguages});
 			this.$el.html(template);
 			
 			this.trigger('render');
@@ -20,7 +20,7 @@ var ProfileView = Backbone.View.extend({
 		var fields = {
 			'name': this.$("input[name=name]").val(),
 			'email': this.$("input[name=email]").val(),
-			'lang': this.$("input[name=lang]").val(),
+			'lang': this.$("select[name=lang]").val(),
 			'currency': this.$("input[name=currency]").val(),
 			'useEncryption': this.$("input[name=useEncryption]").prop('checked') ? '1' : '0',
 			'newPassword': this.$("input[name=newPassword]").val(),
@@ -30,6 +30,7 @@ var ProfileView = Backbone.View.extend({
 		
 		if(myWallet.user.patch(fields))
 		{
+			myWallet.reloadTranslation();
 			myWallet.msg('Профіль збережено');			
 		}
 		
