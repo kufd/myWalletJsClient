@@ -90,11 +90,9 @@ var myWallet = {
 myWallet.init = function()
 {
 	this._initErrorHandler();
-		
+	
 	this._initUser();
 	
-	spendingsTop.initialize();
-
 	this.views.main = new MainView();
 	this.views.main.render();
 	
@@ -237,6 +235,8 @@ myWallet._initUser = function()
 {
 	this.user = new User();
 	
+	spendingsTop.initialize();
+	
 	this.user.loginWithSavedLoginData();
 	
 	this._setLangSettings();
@@ -330,11 +330,11 @@ myWallet.translations.en = {
 	"Мій гаманець" : "My Wallet",
 	"Звіти" : "Reports",
 	"Профіль" : "Profile",
-	"Вихід" : "Logout",
+	"Вихід" : "Sign out",
 	"Додати витрату" : "Add spending",
 	"Гаманець": "Wallet",
 	"Адмін-панель": "Admin-panel",
-	"Вхід": "Login",
+	"Вхід": "Sign in",
 	"Логін": "Login",
 	"Ім’я": "Name",
 	"Мова": "Language",
@@ -352,6 +352,27 @@ myWallet.translations.en = {
 	"Редагувати": "Edit",
 	"Видалити": "Delete",
 	"Загальна сума": "Total amount",
+	"Сервіс який допоможе підсумувати ваші витрати": "Service which can count money you spend",
+	"Більше інформації": "More information",
+	"Пароль": "Password",
+	"Запам’ятати": "Keep me signed in",
+	"Увійти": "Sign in",
+	"Забув пароль": "Forgot password",
+	"Зареєструватись": "Register",
+	"це сервіс з допомогою якого ви можете підсумовувати свої витрати за періоди часу": "service which can count money your spend for some period of time",
+	"А потім, з допомогою <b>MyWallet</b> внесені витрати можна групувати по днях та назвах і визначити на що ви найбільше витрачали грошей": "Then, with <b>MyWallet</b> you can group spendings by days and names. And you can see the biggest spendings",
+	"Всі цифри які ви вносите можуть шифруватись, але <b>у випадку втрати паролю цю інформацію не можна буде відновити</b>": "All amounts you save could be enncrypted, but <b>if you lose password it is imposible to get this information</b>",
+	"Реєстрація": "Sign up",
+	"Повтор пароля": "Retype password",
+	"Контакти": "Contacts",
+	"Увага": "Attention",
+	"При використанні процедури відновлення паролю буде втрачена зашифрована інформація": "If you use restore password process, encrypted information will be lost",
+	"Відровлення паролю": "Restore passwrod",
+	"Введіть ваш логін": "Enter your login",
+	"Відновити": "Restore",
+	"Сума по витратах": "Amount by spending name",
+	"Нова витрата": "New spending",
+	"Інша витрата": "another spending",
 }
 
 myWallet.translations.ua = {
@@ -380,6 +401,27 @@ myWallet.translations.ua = {
 	"Редагувати": "Редагувати",
 	"Видалити": "Видалити",
 	"Загальна сума": "Загальна сума",
+	"Сервіс який допоможе підсумувати ваші витрати": "Сервіс який допоможе підсумувати ваші витрати",
+	"Більше інформації": "Більше інформації",
+	"Пароль": "Пароль",
+	"Запам’ятати": "Запам’ятати",
+	"Увійти": "Увійти",
+	"Забув пароль": "Забув пароль",
+	"Зареєструватись": "Зареєструватись",
+	"це сервіс з допомогою якого ви можете підсумовувати свої витрати за періоди часу": "це сервіс з допомогою якого ви можете підсумовувати свої витрати за періоди часу",
+	"А потім, з допомогою <b>MyWallet</b> внесені витрати можна групувати по днях та назвах і визначити на що ви найбільше витрачали грошей": "А потім, з допомогою <b>MyWallet</b> внесені витрати можна групувати по днях та назвах і визначити на що ви найбільше витрачали грошей",
+	"Всі цифри які ви вносите можуть шифруватись, але <b>у випадку втрати паролю цю інформацію не можна буде відновити</b>": "Всі цифри які ви вносите можуть шифруватись, але <b>у випадку втрати паролю цю інформацію не можна буде відновити</b>",
+	"Реєстрація": "Реєстрація",
+	"Повтор пароля": "Повтор пароля",
+	"Контакти": "Контакти",
+	"Увага": "Увага",
+	"При використанні процедури відновлення паролю буде втрачена зашифрована інформація": "При використанні процедури відновлення паролю буде втрачена зашифрована інформація",
+	"Відровлення паролю": "Відровлення паролю",
+	"Введіть ваш логін": "Введіть ваш логін",
+	"Відновити": "Відновити",
+	"Сума по витратах": "Сума по витратах",
+	"Нова витрата": "Нова витрата",
+	"Інша витрата": "Інша витрата",
 }
 
 ;
@@ -813,13 +855,13 @@ myWallet.templates.about = _.template(
 	'<div class="about">\
 \
 		<p>\
-			<b>MyWallet</b> - це сервіс з допомогою якого ви можете підсумовувати свої витрати за періоди часу.\
+			<b>MyWallet</b> - <%=myWallet.t("це сервіс з допомогою якого ви можете підсумовувати свої витрати за періоди часу")%>.\
 			<br/>\
-			А потім, з допомогою <b>MyWallet</b> внесені витрати можна групувати по днях та назвах і визначити на що ви найбільше витрачали грошей.\
+			<%=myWallet.t("А потім, з допомогою <b>MyWallet</b> внесені витрати можна групувати по днях та назвах і визначити на що ви найбільше витрачали грошей")%>.\
 		</p>\
 \
 		<p>\
-			Всі цифри які ви вносите можуть шифруватись, але <b>у випадку втрати паролю цю інформацію не можна буде відновити</b>.\
+			<%=myWallet.t("Всі цифри які ви вносите можуть шифруватись, але <b>у випадку втрати паролю цю інформацію не можна буде відновити</b>")%>.\
 		</p>\
 \
 	</div>'
@@ -832,21 +874,21 @@ myWallet.templates.forgotPassword = _.template(
 	'<div class="forgotPassword">\
 \
 		<div class="alert">\
-			<h2>Увага!</h3>\
-			При використанні процедури відновлення паролю буде втрачена зашифрована інформація.\
+			<h2><%=myWallet.t("Увага")%>!</h3>\
+			<%=myWallet.t("При використанні процедури відновлення паролю буде втрачена зашифрована інформація")%>.\
 		</div>\
 \
 		<div class="form">\
-			<h3>Відровлення паролю</h3>\
+			<h3><%=myWallet.t("Відровлення паролю")%></h3>\
 \
 			<table>\
 			<tr>\
-				<td>Введіть ваш логін</td>\
+				<td><%=myWallet.t("Введіть ваш логін")%></td>\
 				<td><input type="text" name="login"></td>\
 			</tr>\
 			<tr>\
 				<td colspan="2" class="submit">\
-					<input type="button" value="Відновити" />\
+					<input type="button" value="<%=myWallet.t("Відновити")%>" />\
 				</td>\
 			</tr>\
 			</table>\
@@ -859,10 +901,10 @@ myWallet.templates.forgotPassword = _.template(
 
 
 myWallet.templates.formAddSpending =
-	'<div class="formAddSpending" title="Нова витрата">\
+	'<div class="formAddSpending" title="<%=myWallet.t("Нова витрата")%>">\
 		<table>\
 		<tr>\
-			<td class="name">Витрата</td>\
+			<td class="name"><%=myWallet.t("Витрата")%></td>\
 			<td class="value">\
 				<% if(!spendingsTop.get()){ %>\
 					<input type="text" name="spendingName" />\
@@ -871,17 +913,17 @@ myWallet.templates.formAddSpending =
 						<% $.each(spendingsTop.get(), function(index, spendingTopName) { %>\
 							<option value="<%=spendingTopName%>"><%=spendingTopName%></option>\
 						<% }); %>\
-						<option value="">Інша витрата</option>\
+						<option value=""><%=myWallet.t("Інша витрата")%></option>\
 					</select>\
 				<% } %>\
 			</td>\
 		</tr>\
 		<tr>\
-			<td class="name">Сума</td>\
+			<td class="name"><%=myWallet.t("Сума")%></td>\
 			<td class="value"><input type="text" name="amount" value="" /></td>\
 		</tr>\
 		<tr>\
-			<td class="name">Дата</td>\
+			<td class="name"><%=myWallet.t("Дата")%></td>\
 			<td class="value">\
 				<input type="text" name="dateFront" value="" readonly="readonly" />\
 				<input type="hidden" name="date" value="" />\
@@ -897,38 +939,38 @@ myWallet.templates.login = _.template(
 	'<div class="login">\
 \
 		<p class="about">\
-			Сервіс який допоможе підсумувати ваші витрати.\
+			<%=myWallet.t("Сервіс який допоможе підсумувати ваші витрати")%>.\
 			<a href="#about">\
-				Більше інформації.\
+				<%=myWallet.t("Більше інформації")%>.\
 			</a>\
 		</p>\
 \
 		<div class="form">\
-			<h3>Вхід</h3>\
+			<h3><%=myWallet.t("Вхід")%></h3>\
 \
 			<table>\
 			<tr>\
-				<td>Логін</td>\
+				<td><%=myWallet.t("Логін")%></td>\
 				<td><input type="text" name="login"></td>\
 			</tr>\
 			<tr>\
-				<td>Пароль</td>\
+				<td><%=myWallet.t("Пароль")%></td>\
 				<td><input type="password" name="password"></td>\
 			</tr>\
 			<tr>\
 				<td></td>\
-				<td><label><input type="checkbox" name="remember"> Запам’ятати</label></td>\
+				<td><label><input type="checkbox" name="remember"> <%=myWallet.t("Запам’ятати")%></label></td>\
 			</tr>\
 			<tr>\
 				<td colspan="2" class="submit">\
-					<input type="button" value="Увійти" />\
+					<input type="button" value="<%=myWallet.t("Увійти")%>" />\
 				</td>\
 			</tr>\
 			<tr>\
 				<td colspan="2">\
-					<a href="#forgotPassword" class="forgot">Забув пароль</a>\
+					<a href="#forgotPassword" class="forgot"><%=myWallet.t("Забув пароль")%></a>\
 					<a href="#register" class="register">\
-						Зареєструватись\
+						<%=myWallet.t("Зареєструватись")%>\
 					</a>\
 				</td>\
 			</tr>\
@@ -973,7 +1015,7 @@ myWallet.templates.main = _.template(
 				<li class="active"><a href="index.html">головна</a></li>\
 			</ul-->\
 		</div>\
-		<div class="contacts">Контакти: <a href="mailto:mywallet.service@gmail.com">mywallet.service@gmail.com</a></div>\
+		<div class="contacts"><%=myWallet.t("Контакти")%>: <a href="mailto:mywallet.service@gmail.com">mywallet.service@gmail.com</a></div>\
 		<p id="legal">(c) 2013 mywallet.com. Design by <a href="http://www.freecsstemplates.org/" target="_blank">Free CSS Templates</a>.</p>\
 	</div>\
 	<!-- end footer -->'
@@ -1046,15 +1088,15 @@ myWallet.templates.profile =
 myWallet.templates.register = _.template(
 	'<div class="register">\
 \
-		<h3>Реєстрація</h3>\
+		<h3><%=myWallet.t("Реєстрація")%></h3>\
 \
 		<table>\
 		<tr>\
-			<td>Логін</td>\
+			<td><%=myWallet.t("Логін")%></td>\
 			<td><input type="text" name="login"></td>\
 		</tr>\
 		<tr>\
-			<td>Ім’я</td>\
+			<td><%=myWallet.t("Ім’я")%></td>\
 			<td><input type="text" name="name"></td>\
 		</tr>\
 		<tr>\
@@ -1062,16 +1104,16 @@ myWallet.templates.register = _.template(
 			<td><input type="text" name="email"></td>\
 		</tr>\
 		<tr>\
-			<td>Пароль</td>\
+			<td><%=myWallet.t("Пароль")%></td>\
 			<td><input type="text" name="password"></td>\
 		</tr>\
 		<tr>\
-			<td>Повтор пароля</td>\
+			<td><%=myWallet.t("Повтор пароля")%></td>\
 			<td><input type="text" name="confirmPassword"></td>\
 		</tr>\
 		<tr>\
 			<td colspan="2" class="submit">\
-				<input type="button" value="Зареєструватись" />\
+				<input type="button" value="<%=myWallet.t("Зареєструватись")%>" />\
 			</td>\
 		</tr>\
 		</table>\
@@ -1138,7 +1180,7 @@ myWallet.templates.reports =
 	'<div class="reports">\
 \
 		<ul>\
-			<li><a href="#reportGroupBySpengingName">Сума по витратах</a></li>\
+			<li><a href="#reportGroupBySpengingName"><%=myWallet.t("Сума по витратах")%></a></li>\
 		</ul>\
 \
 	</div>';
@@ -1249,14 +1291,14 @@ var MainView = Backbone.View.extend({
 		myWallet.views.login.bind(
 			'render', 
 			function(){ 
-				view.$('a.login, a.logout, a.spendings, a.profile').hide();
+				view.$('a.login, a.logout, a.spendings, a.profile, a.reports').hide();
 			}
 		);
 		
 		myWallet.views.register.bind(
 			'render', 
 			function(){ 
-				view.$('a.logout, a.spendings, a.profile').hide();
+				view.$('a.logout, a.spendings, a.profile, a.reports').hide();
 				view.$('a.login').show();
 			}
 		);
@@ -1264,7 +1306,7 @@ var MainView = Backbone.View.extend({
 		myWallet.views.about.bind(
 			'render', 
 			function(){ 
-				view.$('a.logout, a.spendings, a.profile').hide();
+				view.$('a.logout, a.spendings, a.profile, a.reports').hide();
 				view.$('a.login').show();
 			}
 		);
@@ -1280,7 +1322,7 @@ var MainView = Backbone.View.extend({
 		myWallet.views.forgotPassword.bind(
 			'render', 
 			function(){ 
-				view.$('a.profile, a.logout, a.spendings').hide();
+				view.$('a.profile, a.logout, a.spendings, a.reports').hide();
 				view.$('a.login').show();
 			}
 		);

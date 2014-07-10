@@ -35,14 +35,14 @@ var MainView = Backbone.View.extend({
 		myWallet.views.login.bind(
 			'render', 
 			function(){ 
-				view.$('a.login, a.logout, a.spendings, a.profile').hide();
+				view.$('a.login, a.logout, a.spendings, a.profile, a.reports').hide();
 			}
 		);
 		
 		myWallet.views.register.bind(
 			'render', 
 			function(){ 
-				view.$('a.logout, a.spendings, a.profile').hide();
+				view.$('a.logout, a.spendings, a.profile, a.reports').hide();
 				view.$('a.login').show();
 			}
 		);
@@ -50,7 +50,7 @@ var MainView = Backbone.View.extend({
 		myWallet.views.about.bind(
 			'render', 
 			function(){ 
-				view.$('a.logout, a.spendings, a.profile').hide();
+				view.$('a.logout, a.spendings, a.profile, a.reports').hide();
 				view.$('a.login').show();
 			}
 		);
@@ -66,7 +66,7 @@ var MainView = Backbone.View.extend({
 		myWallet.views.forgotPassword.bind(
 			'render', 
 			function(){ 
-				view.$('a.profile, a.logout, a.spendings').hide();
+				view.$('a.profile, a.logout, a.spendings, a.reports').hide();
 				view.$('a.login').show();
 			}
 		);

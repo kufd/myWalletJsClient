@@ -18,11 +18,9 @@ var myWallet = {
 myWallet.init = function()
 {
 	this._initErrorHandler();
-		
+	
 	this._initUser();
 	
-	spendingsTop.initialize();
-
 	this.views.main = new MainView();
 	this.views.main.render();
 	
@@ -164,6 +162,8 @@ myWallet.reloadTranslation = function()
 myWallet._initUser = function()
 {
 	this.user = new User();
+	
+	spendingsTop.initialize();
 	
 	this.user.loginWithSavedLoginData();
 	

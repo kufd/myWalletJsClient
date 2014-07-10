@@ -31,7 +31,7 @@ myWallet.templates.main = _.template(
 				<li class="active"><a href="index.html">головна</a></li>\
 			</ul-->\
 		</div>\
-		<div class="contacts">Контакти: <a href="mailto:mywallet.service@gmail.com">mywallet.service@gmail.com</a></div>\
+		<div class="contacts"><%=myWallet.t("Контакти")%>: <a href="mailto:mywallet.service@gmail.com">mywallet.service@gmail.com</a></div>\
 		<p id="legal">(c) 2013 mywallet.com. Design by <a href="http://www.freecsstemplates.org/" target="_blank">Free CSS Templates</a>.</p>\
 	</div>\
 	<!-- end footer -->'
