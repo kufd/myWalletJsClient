@@ -54,8 +54,8 @@ myWallet.translations.en = {
 	"Довжина імені має бути більшою 2 і меншою 100 символів": "Name length must be between 2 and 100",
 	"Неправильний код мови": "Wrong language code",
 	"Неправильний email": "Wrong email",
-	"Не введений пароль": "Wrong password",
-	"Не введено підтвердження паролю": "Wrong password confirmation",
+	"Не введений пароль": "Enter password",
+	"Не введено підтвердження паролю": "Enter password confirmation",
 	"Не правильно задана опція шифрування даних": "Wrong option for data encryption",
 	"Такий логін вже існує": "Login exists yet",
 	"Такий email вже існує": "Email exists yet",
@@ -64,4 +64,6 @@ myWallet.translations.en = {
 	"Введіть назву витрати": "Enter name of spending",
 	"Сума витрати має бути числом": "Amaont must be a numer",
 	"Не задана дата для витрати": "Date of spending is not set",
+	"Помилка!": "Error!",
+	"Повідомлення": "Message",
 }

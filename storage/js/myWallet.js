@@ -211,12 +211,12 @@ myWallet.isUserLoggedIn = function()
 
 myWallet.errorMsg = function(msg)
 {
-	$.jboxmessage('Помилка!', msg, 'top', 'error');
+	$.jboxmessage(myWallet.t('Помилка!'), myWallet.t(msg), 'top', 'error');
 }
 
 myWallet.msg = function(msg)
 {
-	$.jboxmessage('Повідомлення', msg, 'top');
+	$.jboxmessage(myWallet.t('Повідомлення'), myWallet.t(msg), 'top');
 }
 
 myWallet.setErrors = function(errors)
