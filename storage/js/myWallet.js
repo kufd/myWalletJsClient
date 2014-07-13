@@ -168,12 +168,35 @@ myWallet._initUser = function()
 	this.user.loginWithSavedLoginData();
 	
 	this._setLangSettings();
+	
+	myWallet.user.bind(
+		'login:success', 
+		function(){ 
+			if(myWallet._getDefaultUserLang() != myWallet.user.get('lang'))
+			{
+				myWallet.reloadTranslation();
+			}
+		}
+	);
 }
 
 myWallet._setLangSettings = function()
 {
 	this.translator.extend(this.translations[this.user.get('lang')]);
 	$.datepicker.setDefaults($.datepicker.regional[this.user.get('lang')]);
+}
+
+myWallet._getDefaultUserLang = function()
+{
+	var userLang = navigator.language || navigator.userLanguage;
+	userLang = userLang == 'uk' ? 'ua' : userLang;
+	
+	if(_.indexOf(this.availableLanguages, userLang) == -1)
+	{
+		userLang = 'en';
+	}
+	
+	return userLang;
 }
 
 myWallet.isUserLoggedIn = function()

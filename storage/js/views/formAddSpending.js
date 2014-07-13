@@ -54,11 +54,11 @@ var FormAddSpendingView = Backbone.View.extend({
 			buttons:
 				[ 
 					{
-		               	text: "Зберегти",
+		               	text: myWallet.t("Зберегти"),
 		               	click: function() { view.saveSpending(); }
 					},
 				 	{
-				 		text: "Відмінити",
+				 		text: myWallet.t("Відмінити"),
 				 		click: function() { view.remove(); }
 				 	}
 				],

@@ -2,7 +2,7 @@
 myWallet.templates.reportGroupBySpengingName = 
 	'<div class="reportGroupBySpengingName">\
 \
-		<h2>Звіт: сума по витратах</h2>\
+		<h2><%=myWallet.t("Звіт: сума по витратах")%></h2>\
 		<div class="tool_panel">\
 			Період: \
 			<input name="dateBeginFront" type="text">\
@@ -15,10 +15,10 @@ myWallet.templates.reportGroupBySpengingName =
 		<table class="spendings">\
 		<tr>\
 			<th class="spendingName">\
-				<div data-field="spendingName" class="<%=sortOptions.field == "spendingName" ? sortOptions.direction : ""%>">Витрата</div>\
+				<div data-field="spendingName" class="<%=sortOptions.field == "spendingName" ? sortOptions.direction : ""%>"><%=myWallet.t("Витрата")%></div>\
 			</th>\
 			<th class="amount">\
-				<div data-field="amount" class="<%=sortOptions.field == "amount" ? sortOptions.direction : ""%>">Сума</div>\
+				<div data-field="amount" class="<%=sortOptions.field == "amount" ? sortOptions.direction : ""%>"><%=myWallet.t("Сума")%></div>\
 			</th>\
 		</tr>\
 \
@@ -38,7 +38,7 @@ myWallet.templates.reportGroupBySpengingName =
 \
 		<tr class="sum">\
 			<td class="spendingName">\
-				Загальна сума\
+				<%=myWallet.t("Загальна сума")%>\
 			</td>\
 			<td class="amount">\
 				<%=sum/100%> <%=user.get("currency")%>\

@@ -45,4 +45,6 @@ myWallet.translations.en = {
 	"Сума по витратах": "Amount by spending name",
 	"Нова витрата": "New spending",
 	"Інша витрата": "another spending",
+	"Звіт: сума по витратах": "Report: amount by spending name",
+	"Відмінити": "Cancel",
 }

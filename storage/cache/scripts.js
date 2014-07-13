@@ -240,12 +240,35 @@ myWallet._initUser = function()
 	this.user.loginWithSavedLoginData();
 	
 	this._setLangSettings();
+	
+	myWallet.user.bind(
+		'login:success', 
+		function(){ 
+			if(myWallet._getDefaultUserLang() != myWallet.user.get('lang'))
+			{
+				myWallet.reloadTranslation();
+			}
+		}
+	);
 }
 
 myWallet._setLangSettings = function()
 {
 	this.translator.extend(this.translations[this.user.get('lang')]);
 	$.datepicker.setDefaults($.datepicker.regional[this.user.get('lang')]);
+}
+
+myWallet._getDefaultUserLang = function()
+{
+	var userLang = navigator.language || navigator.userLanguage;
+	userLang = userLang == 'uk' ? 'ua' : userLang;
+	
+	if(_.indexOf(this.availableLanguages, userLang) == -1)
+	{
+		userLang = 'en';
+	}
+	
+	return userLang;
 }
 
 myWallet.isUserLoggedIn = function()
@@ -373,6 +396,8 @@ myWallet.translations.en = {
 	"Сума по витратах": "Amount by spending name",
 	"Нова витрата": "New spending",
 	"Інша витрата": "another spending",
+	"Звіт: сума по витратах": "Report: amount by spending name",
+	"Відмінити": "Cancel",
 }
 
 myWallet.translations.ua = {
@@ -422,6 +447,8 @@ myWallet.translations.ua = {
 	"Сума по витратах": "Сума по витратах",
 	"Нова витрата": "Нова витрата",
 	"Інша витрата": "Інша витрата",
+	"Звіт: сума по витратах": "Звіт: сума по витратах",
+	"Відмінити": "Відмінити",
 }
 
 ;
@@ -534,7 +561,7 @@ var User = Backbone.Model.extend({
 		name: null,
 		email: null,
 		role: null,
-		lang: 'en',
+		lang: myWallet._getDefaultUserLang(),
 		currency: null,
 		useEncryption: null,
 		authorized: false
@@ -574,7 +601,10 @@ var User = Backbone.Model.extend({
 	
 	logout: function()
 	{
+		var userLang = this.get('lang');
+		
 		this.clear();
+		this.set('lang', userLang);
 		this._removeLoginData();
 		this.set('loggedIn', false);
 		this.trigger('logout');
@@ -1127,7 +1157,7 @@ myWallet.templates.register = _.template(
 myWallet.templates.reportGroupBySpengingName = 
 	'<div class="reportGroupBySpengingName">\
 \
-		<h2>Звіт: сума по витратах</h2>\
+		<h2><%=myWallet.t("Звіт: сума по витратах")%></h2>\
 		<div class="tool_panel">\
 			Період: \
 			<input name="dateBeginFront" type="text">\
@@ -1140,10 +1170,10 @@ myWallet.templates.reportGroupBySpengingName =
 		<table class="spendings">\
 		<tr>\
 			<th class="spendingName">\
-				<div data-field="spendingName" class="<%=sortOptions.field == "spendingName" ? sortOptions.direction : ""%>">Витрата</div>\
+				<div data-field="spendingName" class="<%=sortOptions.field == "spendingName" ? sortOptions.direction : ""%>"><%=myWallet.t("Витрата")%></div>\
 			</th>\
 			<th class="amount">\
-				<div data-field="amount" class="<%=sortOptions.field == "amount" ? sortOptions.direction : ""%>">Сума</div>\
+				<div data-field="amount" class="<%=sortOptions.field == "amount" ? sortOptions.direction : ""%>"><%=myWallet.t("Сума")%></div>\
 			</th>\
 		</tr>\
 \
@@ -1163,7 +1193,7 @@ myWallet.templates.reportGroupBySpengingName =
 \
 		<tr class="sum">\
 			<td class="spendingName">\
-				Загальна сума\
+				<%=myWallet.t("Загальна сума")%>\
 			</td>\
 			<td class="amount">\
 				<%=sum/100%> <%=user.get("currency")%>\
@@ -1705,11 +1735,11 @@ var FormAddSpendingView = Backbone.View.extend({
 			buttons:
 				[ 
 					{
-		               	text: "Зберегти",
+		               	text: myWallet.t("Зберегти"),
 		               	click: function() { view.saveSpending(); }
 					},
 				 	{
-				 		text: "Відмінити",
+				 		text: myWallet.t("Відмінити"),
 				 		click: function() { view.remove(); }
 				 	}
 				],

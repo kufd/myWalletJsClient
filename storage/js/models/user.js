@@ -9,7 +9,7 @@ var User = Backbone.Model.extend({
 		name: null,
 		email: null,
 		role: null,
-		lang: 'en',
+		lang: myWallet._getDefaultUserLang(),
 		currency: null,
 		useEncryption: null,
 		authorized: false
@@ -49,7 +49,10 @@ var User = Backbone.Model.extend({
 	
 	logout: function()
 	{
+		var userLang = this.get('lang');
+		
 		this.clear();
+		this.set('lang', userLang);
 		this._removeLoginData();
 		this.set('loggedIn', false);
 		this.trigger('logout');
