@@ -66,4 +66,10 @@ myWallet.translations.en = {
 	"Не задана дата для витрати": "Date of spending is not set",
 	"Помилка!": "Error!",
 	"Повідомлення": "Message",
+	"Сума по періодах": "Amount by reriod",
+	"Звіт: сума по періодах": "Report: amount by period",
+	"Групувати по": "Group by",
+	"тижню": "week",
+	"місяцю": "month",
+	"року": "year",
 }

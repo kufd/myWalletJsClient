@@ -78,6 +78,22 @@ var MainView = Backbone.View.extend({
 				view.$('a.spendings, a.logout, a.profile').show();
 			}
 		);
+
+		myWallet.views.reportGroupBySpengingName.bind(
+			'render', 
+			function(){ 
+				view.$('a.login').hide();
+				view.$('a.spendings, a.logout, a.profile, a.reports').show();
+			}
+		);
+
+		myWallet.views.reportAmountByPeriod.bind(
+			'render', 
+			function(){ 
+				view.$('a.login').hide();
+				view.$('a.spendings, a.logout, a.profile, a.reports').show();
+			}
+		);
 	}
 });
 

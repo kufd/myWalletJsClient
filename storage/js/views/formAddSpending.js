@@ -1,8 +1,6 @@
 var FormAddSpendingView = Backbone.View.extend({
 	el: 'body',
 	template: myWallet.templates.formAddSpending,
-	urlAutocomplete: '/v1/spendings/autocomplete/',
-	cacheAutocoplete: {},
 	
 	events: {
 		"click div.formAddSpending select[name=spendingName]": "selectSpendingName"
@@ -96,33 +94,7 @@ var FormAddSpendingView = Backbone.View.extend({
 		var view = this;
 		
 		this.$("select[name=spendingName]").replaceWith('<input type="text" name="spendingName" />');
-		this.$("input[name=spendingName]").autocomplete({
-			minLength: 2,
-			source: function( request, response ){
-				var term = request.term;
-				
-				if (term in view.cacheAutocoplete) 
-				{
-					response(view.cacheAutocoplete[term]);
-					return;
-				}
-				
-				$.ajax({
-					type: "GET",
-					url: view.urlAutocomplete,
-					async: false,
-					headers: myWallet.getAuthHeader(),
-					data: {name: request.term},
-					dataType: 'json',
-					success: function(fields)
-					{
-						view.cacheAutocoplete[term] = fields;
-						response(fields);
-					},
-					error: myWallet.processAjaxError
-				});
-			}
-		});
+		this.$("input[name=spendingName]").spendingNameAutocomplete();
 	}
 });
 

@@ -1,0 +1,24 @@
+div.reportAmountByPeriod
+{
+	min-height:500px;
+}
+
+
+div.reportAmountByPeriod div.tool_panel
+{
+	padding: 5px 0px 30px;
+	line-height:30px;
+}
+
+div.reportAmountByPeriod div.tool_panel input
+{
+	width:110px;
+	cursor:pointer;
+}
+div.reportAmountByPeriod div.tool_panel input[name=spendingName]
+{
+	width:200px;
+	cursor: text;
+}
+
+

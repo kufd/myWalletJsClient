@@ -29,11 +29,8 @@ gulp.task('scripts', function() {
 		"storage/js/translations/*",
 		"storage/js/errors.js",
 		"storage/js/main.js",
-		"storage/js/models/spendingsTop.js",
-		"storage/js/models/user.js",
-		"storage/js/models/spending.js",
-		"storage/js/models/reportGroupBySpengingName.js",
-		"storage/js/collections/spendings.js",
+		"storage/js/models/*",
+		"storage/js/collections/*",
 		"storage/js/templates/*",
 		"storage/js/views/main.js",
 		"storage/js/views/login.js",
@@ -45,6 +42,7 @@ gulp.task('scripts', function() {
 		"storage/js/views/formAddSpending.js",
 		"storage/js/views/reports.js",
 		"storage/js/views/reportGroupBySpengingName.js",
+		"storage/js/views/reportAmountByPeriod.js"
 	])
     .pipe(concat('scripts.js'))
     .pipe(gulp.dest('storage/cache'))

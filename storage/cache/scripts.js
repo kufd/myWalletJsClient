@@ -105,6 +105,7 @@ myWallet.init = function()
 	this.views.formAddSpending = new FormAddSpendingView();
 	this.views.reports = new ReportsView();
 	this.views.reportGroupBySpengingName = new ReportGroupBySpengingNameView();
+	this.views.reportAmountByPeriod = new ReportAmountByPeriodView();
 	
 	this.views.main.initAfterEvrithing();
 	
@@ -121,6 +122,7 @@ myWallet.init = function()
 			"profile": "profile",
 			"reports": "reports",
 			"reportGroupBySpengingName": "reportGroupBySpengingName",
+			"reportAmountByPeriod": "reportAmountByPeriod",
 		},
 
 		login: function() {
@@ -153,6 +155,10 @@ myWallet.init = function()
 		
 		reportGroupBySpengingName: function() {
 			myWallet.views.reportGroupBySpengingName.render();
+		},
+		
+		reportAmountByPeriod: function() {
+			myWallet.views.reportAmountByPeriod.render();
 		}
 
 	});
@@ -417,6 +423,12 @@ myWallet.translations.en = {
 	"Не задана дата для витрати": "Date of spending is not set",
 	"Помилка!": "Error!",
 	"Повідомлення": "Message",
+	"Сума по періодах": "Amount by reriod",
+	"Звіт: сума по періодах": "Report: amount by period",
+	"Групувати по": "Group by",
+	"тижню": "week",
+	"місяцю": "month",
+	"року": "year",
 }
 
 myWallet.translations.ua = {
@@ -487,6 +499,12 @@ myWallet.translations.ua = {
 	"Не задана дата для витрати": "Не задана дата для витрати",
 	"Помилка!": "Помилка!",
 	"Повідомлення": "Повідомлення",
+	"Сума по періодах": "Сума по періодах",
+	"Звіт: сума по періодах": "Звіт: сума по періодах",
+	"Групувати по": "Групувати по",
+	"тижню": "тижню",
+	"місяцю": "місяцю",
+	"року": "року",
 }
 
 ;
@@ -548,6 +566,255 @@ $( document ).ready(function() {
 	myWallet.init();
 
 });
+var reportAmountBySpenging = {
+	
+	_data: null,
+	_url: myWallet.apiBaseUrl + '/reports/amount-by-period/',
+	_dateBegin: null,
+	_dateEnd: null,
+	_groupByPeriod: null,
+	_spendingName: null,
+	
+	_loadData: function()
+	{
+		var report = this;
+
+		$.ajax({
+			type: "GET",
+			url: this._url,
+			async: false,
+			headers: myWallet.getAuthHeader(),
+			data: {dateBegin: this._dateBegin, dateEnd: this._dateEnd, period: this._groupByPeriod},
+			dataType: 'json',
+			success: function(data)
+			{
+				report._data = data.data;
+			},
+			error: myWallet.processAjaxError
+		});
+	},
+	
+	setGroupByPeriod: function(groupByPeriod)
+	{
+		this._data = null;
+		this._groupByPeriod = groupByPeriod;
+	},
+	
+	setSpendingName: function(spendingName)
+	{
+		this._data = null;
+		this._spendingName = spendingName;
+	},
+	
+	setDateBegin: function(dateBegin)
+	{
+		this._data = null;
+		this._dateBegin = dateBegin;
+	},
+	
+	setDateEnd: function(dateEnd)
+	{
+		this._data = null;
+		this._dateEnd = dateEnd;
+	},
+	
+	getSpendingName: function()
+	{
+		return  this._spendingName;
+	},
+	
+	getGroupByPeriod: function()
+	{
+		return  this._groupByPeriod;
+	},
+		
+	getDateBegin: function()
+	{
+		return  this._dateBegin;
+	},
+	
+	getDateEnd: function()
+	{
+		return this._dateEnd;
+	},
+	
+	getData: function()
+	{
+		if(this._data == null)
+		{
+			this._loadData();
+		}
+		
+		return this._data;
+	}
+}
+var reportGroupBySpengingName = {
+	
+	_data: null,
+	_url: myWallet.apiBaseUrl + '/reports/group-by-spending-name/',
+	_sortOptions: {'field': 'amount', 'direction': 'desc'},
+	_dateBegin: null,
+	_dateEnd: null,
+	
+	_loadData: function()
+	{
+		var report = this;
+
+		$.ajax({
+			type: "GET",
+			url: this._url,
+			async: false,
+			headers: myWallet.getAuthHeader(),
+			data: {dateBegin: this._dateBegin, dateEnd: this._dateEnd},
+			dataType: 'json',
+			success: function(data)
+			{
+				report._data = data.data;
+				report._sort();
+			},
+			error: myWallet.processAjaxError
+		});
+	},
+	
+	_sort: function()
+	{
+		this._data = _.sortBy(this._data, this.getSortOptions().field);
+		
+		if(this.getSortOptions().direction == 'desc')
+		{
+			this._data = this._data.reverse();
+		}
+	},
+		
+	setSortOptions: function(sortOptions)
+	{
+		this._sortOptions = sortOptions;
+		this._sort();
+	},
+	
+	setDateBegin: function(dateBegin)
+	{
+		this._data = null;
+		this._dateBegin = dateBegin;
+	},
+	
+	setDateEnd: function(dateEnd)
+	{
+		this._data = null;
+		this._dateEnd = dateEnd;
+	},
+	
+	getSortOptions: function()
+	{
+		return this._sortOptions;
+	},
+	
+	getDateBegin: function()
+	{
+		return  this._dateBegin;
+	},
+	
+	getDateEnd: function()
+	{
+		return this._dateEnd;
+	},
+	
+	getData: function()
+	{
+		if(this._data == null)
+		{
+			this._loadData();
+		}
+		
+		return this._data;
+	}
+}
+var Spending = Backbone.Model.extend({
+	
+	url: myWallet.apiBaseUrl + '/spendings/',
+	
+	defaults: {
+		amount: null, 
+		spendingNameId: null, 
+		date: null, 
+		userId: null, 
+		spendingName: null, 
+		id: null,
+	},
+	
+	destroy: function()
+	{
+		var spending = this;
+		
+		$.ajax({
+			type: "DELETE",
+			url: this.url + spending.get('id') + "/",
+			async: false,
+			headers: myWallet.getAuthHeader(),
+			data: {},
+			dataType: 'json',
+			error: myWallet.processAjaxError
+		});
+	},
+	
+	save: function(attributes, options)
+	{
+		attributes = attributes || {};
+		options = options || {};
+		options.headers = myWallet.getAuthHeader();
+		options.async = false;
+		options.patch = true;
+		options.wait = true;
+		
+		if(!this.isNew())
+		{
+			options.url = this.url + this.get('id');
+		}
+				
+		return Backbone.Model.prototype.save.call(this, attributes, options);
+	}
+});
+
+$.fn.spendingNameAutocomplete = function() {
+	
+	if(!$.fn.spendingNameAutocomplete.cache)
+	{
+		$.fn.spendingNameAutocomplete.cache = {};
+	}
+	
+	var urlAutocomplete = '/v1/spendings/autocomplete/';
+	var cacheAutocoplete = $.fn.spendingNameAutocomplete.cache;
+	
+    this.autocomplete({
+		minLength: 2,
+		source: function( request, response ){
+			var term = request.term;
+
+			if (term in cacheAutocoplete) 
+			{
+				response(cacheAutocoplete[term]);
+				return;
+			}
+
+			$.ajax({
+				type: "GET",
+				url: urlAutocomplete,
+				async: false,
+				headers: myWallet.getAuthHeader(),
+				data: {name: request.term},
+				dataType: 'json',
+				success: function(fields)
+				{
+					cacheAutocoplete[term] = fields;
+					response(fields);
+				},
+				error: myWallet.processAjaxError
+			});
+		}
+	});
+	
+	return this;
+};
 var spendingsTop = {
 	
 	url: myWallet.apiBaseUrl + '/spendings/top/',
@@ -725,133 +992,6 @@ var User = Backbone.Model.extend({
 		}
 	}
 });
-var Spending = Backbone.Model.extend({
-	
-	url: myWallet.apiBaseUrl + '/spendings/',
-	
-	defaults: {
-		amount: null, 
-		spendingNameId: null, 
-		date: null, 
-		userId: null, 
-		spendingName: null, 
-		id: null,
-	},
-	
-	destroy: function()
-	{
-		var spending = this;
-		
-		$.ajax({
-			type: "DELETE",
-			url: this.url + spending.get('id') + "/",
-			async: false,
-			headers: myWallet.getAuthHeader(),
-			data: {},
-			dataType: 'json',
-			error: myWallet.processAjaxError
-		});
-	},
-	
-	save: function(attributes, options)
-	{
-		attributes = attributes || {};
-		options = options || {};
-		options.headers = myWallet.getAuthHeader();
-		options.async = false;
-		options.patch = true;
-		options.wait = true;
-		
-		if(!this.isNew())
-		{
-			options.url = this.url + this.get('id');
-		}
-				
-		return Backbone.Model.prototype.save.call(this, attributes, options);
-	}
-});
-
-var reportGroupBySpengingName = {
-	
-	_data: null,
-	_url: myWallet.apiBaseUrl + '/reports/group-by-spending-name/',
-	_sortOptions: {'field': 'amount', 'direction': 'desc'},
-	_dateBegin: null,
-	_dateEnd: null,
-	
-	_loadData: function()
-	{
-		var report = this;
-
-		$.ajax({
-			type: "GET",
-			url: this._url,
-			async: false,
-			headers: myWallet.getAuthHeader(),
-			data: {dateBegin: this._dateBegin, dateEnd: this._dateEnd},
-			dataType: 'json',
-			success: function(data)
-			{
-				report._data = data.data;
-				report._sort();
-			},
-			error: myWallet.processAjaxError
-		});
-	},
-	
-	_sort: function()
-	{
-		this._data = _.sortBy(this._data, this.getSortOptions().field);
-		
-		if(this.getSortOptions().direction == 'desc')
-		{
-			this._data = this._data.reverse();
-		}
-	},
-		
-	setSortOptions: function(sortOptions)
-	{
-		this._sortOptions = sortOptions;
-		this._sort();
-	},
-	
-	setDateBegin: function(dateBegin)
-	{
-		this._data = null;
-		this._dateBegin = dateBegin;
-	},
-	
-	setDateEnd: function(dateEnd)
-	{
-		this._data = null;
-		this._dateEnd = dateEnd;
-	},
-	
-	getSortOptions: function()
-	{
-		return this._sortOptions;
-	},
-	
-	getDateBegin: function()
-	{
-		return  this._dateBegin;
-	},
-	
-	getDateEnd: function()
-	{
-		return this._dateEnd;
-	},
-	
-	getData: function()
-	{
-		if(this._data == null)
-		{
-			this._loadData();
-		}
-		
-		return this._data;
-	}
-}
 
 var Spendings = Backbone.Collection.extend({
 	model: Spending,
@@ -1192,6 +1332,34 @@ myWallet.templates.register = _.template(
 
 
 
+myWallet.templates.reportAmountByPeriod =
+	'<div class="reportAmountByPeriod">\
+\
+		<h2><%=myWallet.t("Звіт: сума по періодах")%></h2>\
+		<div class="tool_panel">\
+			<%=myWallet.t("Період")%>: \
+			<input name="dateBeginFront" type="text">\
+			<input type="hidden" name="dateBegin" />\
+			&mdash;\
+			<input name="dateEndFront" type="text">\
+			<input type="hidden" name="dateEnd" />\
+			<br/>\
+			<%=myWallet.t("Групувати по")%>: \
+			<select name="groupByPeriod">\
+				<option value="week"><%=myWallet.t("тижню")%></option>\
+				<option value="month"><%=myWallet.t("місяцю")%></option>\
+				<option value="year"><%=myWallet.t("року")%></option>\
+			</select>\
+			<br/>\
+			<%=myWallet.t("Витрата")%>: \
+			<input type="text" name="spendingName" />\
+		</div>\
+\
+	</div>';
+
+
+
+
 myWallet.templates.reportGroupBySpengingName = 
 	'<div class="reportGroupBySpengingName">\
 \
@@ -1249,6 +1417,7 @@ myWallet.templates.reports =
 \
 		<ul>\
 			<li><a href="#reportGroupBySpengingName"><%=myWallet.t("Сума по витратах")%></a></li>\
+			<li><a href="#reportAmountByPeriod"><%=myWallet.t("Сума по періодах")%></a></li>\
 		</ul>\
 \
 	</div>';
@@ -1400,6 +1569,22 @@ var MainView = Backbone.View.extend({
 			function(){ 
 				view.$('a.reports, a.login').hide();
 				view.$('a.spendings, a.logout, a.profile').show();
+			}
+		);
+
+		myWallet.views.reportGroupBySpengingName.bind(
+			'render', 
+			function(){ 
+				view.$('a.login').hide();
+				view.$('a.spendings, a.logout, a.profile, a.reports').show();
+			}
+		);
+
+		myWallet.views.reportAmountByPeriod.bind(
+			'render', 
+			function(){ 
+				view.$('a.login').hide();
+				view.$('a.spendings, a.logout, a.profile, a.reports').show();
 			}
 		);
 	}
@@ -1720,8 +1905,6 @@ var ProfileView = Backbone.View.extend({
 var FormAddSpendingView = Backbone.View.extend({
 	el: 'body',
 	template: myWallet.templates.formAddSpending,
-	urlAutocomplete: '/v1/spendings/autocomplete/',
-	cacheAutocoplete: {},
 	
 	events: {
 		"click div.formAddSpending select[name=spendingName]": "selectSpendingName"
@@ -1815,33 +1998,7 @@ var FormAddSpendingView = Backbone.View.extend({
 		var view = this;
 		
 		this.$("select[name=spendingName]").replaceWith('<input type="text" name="spendingName" />');
-		this.$("input[name=spendingName]").autocomplete({
-			minLength: 2,
-			source: function( request, response ){
-				var term = request.term;
-				
-				if (term in view.cacheAutocoplete) 
-				{
-					response(view.cacheAutocoplete[term]);
-					return;
-				}
-				
-				$.ajax({
-					type: "GET",
-					url: view.urlAutocomplete,
-					async: false,
-					headers: myWallet.getAuthHeader(),
-					data: {name: request.term},
-					dataType: 'json',
-					success: function(fields)
-					{
-						view.cacheAutocoplete[term] = fields;
-						response(fields);
-					},
-					error: myWallet.processAjaxError
-				});
-			}
-		});
+		this.$("input[name=spendingName]").spendingNameAutocomplete();
 	}
 });
 
@@ -1953,6 +2110,82 @@ var ReportGroupBySpengingNameView = Backbone.View.extend({
 			//-------------------
 			
 			this.trigger('render');
+		}
+	}
+	
+});
+
+
+var ReportAmountByPeriodView = Backbone.View.extend({
+	el: '#page',
+	template: myWallet.templates.reportAmountByPeriod,
+	report: null,
+	
+	events: {
+	},
+	
+	initialize: function () {
+		this.report = reportAmountBySpenging;
+		
+		this.report.setDateBegin($.datepicker.formatDate('yy-01-01', new Date()));
+		this.report.setDateEnd($.datepicker.formatDate('yy-mm-dd', new Date()));
+		this.report.setGroupByPeriod('month');
+    },
+	
+	render: function () {
+		if(myWallet.isUserLoggedIn())
+		{
+			var template = _.template(
+				this.template,
+				{
+				}
+			);
+			this.$el.html(template);
+			
+			//---------------- initializing tool panel ---------------
+			var view= this;
+			
+			this.$("input[name=spendingName]").spendingNameAutocomplete();
+			
+			this.$("input[name=dateBegin]").val(this.report.getDateBegin());
+			this.$("input[name=dateBeginFront]")
+			.val($.datepicker.formatDate('d GG yy', new Date(this.report.getDateBegin())))
+			.datepicker({
+				dateFormat:'d GG yy',
+				altField: this.$("input[name=dateBegin]"),
+				altFormat: "yy-mm-dd",
+				onClose: function(){
+					view.report.setDateBegin(view.$("input[name=dateBegin]").val());
+					view.render();
+				}
+			});
+			
+			this.$("input[name=dateEnd]").val(this.report.getDateEnd());
+			this.$("input[name=dateEndFront]")
+			.val($.datepicker.formatDate('d GG yy', new Date(this.report.getDateEnd())))
+			.datepicker({
+				dateFormat:'d GG yy',
+				altField: this.$("input[name=dateEnd]"),
+				altFormat: "yy-mm-dd",
+				onClose: function(){
+					view.report.setDateEnd(view.$("input[name=dateEnd]").val());
+					view.render();
+				}
+			});
+			
+			this.$("select[name=groupByPeriod]").val(this.report.getGroupByPeriod());
+			this.$("select[name=groupByPeriod]").change(function(){
+				view.report.setGroupByPeriod($(this).val());
+			});
+			
+			this.$("input[name=spendingName]").blur(function(){
+				view.report.setSpendingName($(this).val());
+			});
+			//-------------------
+			
+			this.trigger('render');
+			
+			view.report.getData();
 		}
 	}
 	
