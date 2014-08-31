@@ -580,13 +580,18 @@ var reportAmountBySpenging = {
 	_loadData: function()
 	{
 		var report = this;
+		var data = {dateBegin: this._dateBegin, dateEnd: this._dateEnd, period: this._groupByPeriod};
+		if(this._spendingName)
+		{
+			data.spendingName = this._spendingName;
+		}
 
 		$.ajax({
 			type: "GET",
 			url: this._url,
 			async: false,
 			headers: myWallet.getAuthHeader(),
-			data: {dateBegin: this._dateBegin, dateEnd: this._dateEnd, period: this._groupByPeriod, spendingName: this._spendingName},
+			data: data,
 			dataType: 'json',
 			success: function(data)
 			{
@@ -2189,8 +2194,6 @@ var ReportAmountByPeriodView = Backbone.View.extend({
 			//---------------- initializing tool panel ---------------
 			var view= this;
 			
-			this.$("input[name=spendingName]").spendingNameAutocomplete();
-			
 			this.$("input[name=dateBegin]").val(this.report.getDateBegin());
 			this.$("input[name=dateBeginFront]")
 			.val($.datepicker.formatDate('d GG yy', new Date(this.report.getDateBegin())))
@@ -2223,6 +2226,8 @@ var ReportAmountByPeriodView = Backbone.View.extend({
 				view.renderChart();
 			});
 			
+			this.$("input[name=spendingName]").spendingNameAutocomplete();
+			this.$("input[name=spendingName]").on("autocompleteclose", function(event, ui) { console.log(1); $(this).blur(); });
 			this.$("input[name=spendingName]").val(this.report.getSpendingName() ? this.report.getSpendingName() : '');
 			this.$("input[name=spendingName]").blur(function(){
 				view.report.setSpendingName($(this).val() ? $(this).val() : null);

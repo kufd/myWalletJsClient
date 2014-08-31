@@ -10,13 +10,18 @@ var reportAmountBySpenging = {
 	_loadData: function()
 	{
 		var report = this;
+		var data = {dateBegin: this._dateBegin, dateEnd: this._dateEnd, period: this._groupByPeriod};
+		if(this._spendingName)
+		{
+			data.spendingName = this._spendingName;
+		}
 
 		$.ajax({
 			type: "GET",
 			url: this._url,
 			async: false,
 			headers: myWallet.getAuthHeader(),
-			data: {dateBegin: this._dateBegin, dateEnd: this._dateEnd, period: this._groupByPeriod, spendingName: this._spendingName},
+			data: data,
 			dataType: 'json',
 			success: function(data)
 			{
