@@ -429,6 +429,7 @@ myWallet.translations.en = {
 	"тижню": "week",
 	"місяцю": "month",
 	"року": "year",
+	"Для вказаних умов даних не знайдено": "Data not found for current conditions",
 }
 
 myWallet.translations.ua = {
@@ -505,6 +506,7 @@ myWallet.translations.ua = {
 	"тижню": "тижню",
 	"місяцю": "місяцю",
 	"року": "року",
+	"Для вказаних умов даних не знайдено": "Для вказаних умов даних не знайдено",
 }
 
 ;
@@ -584,7 +586,7 @@ var reportAmountBySpenging = {
 			url: this._url,
 			async: false,
 			headers: myWallet.getAuthHeader(),
-			data: {dateBegin: this._dateBegin, dateEnd: this._dateEnd, period: this._groupByPeriod},
+			data: {dateBegin: this._dateBegin, dateEnd: this._dateEnd, period: this._groupByPeriod, spendingName: this._spendingName},
 			dataType: 'json',
 			success: function(data)
 			{
@@ -646,6 +648,45 @@ var reportAmountBySpenging = {
 		}
 		
 		return this._data;
+	},
+	
+	getDataForChart: function()
+	{
+		var data = {
+			labels: [],
+			datasets: [
+				{
+					label: "",
+					fillColor: "rgba(151,187,205,0.2)",
+					strokeColor: "rgba(151,187,205,1)",
+					pointColor: "rgba(151,187,205,1)",
+					pointStrokeColor: "#fff",
+					pointHighlightFill: "#fff",
+					pointHighlightStroke: "rgba(151,187,205,1)",
+					data: []
+				}
+			]
+		};
+	
+		for (var k in this.getData())
+		{
+			var value = this.getData()[k];
+			
+			var label = value.year;
+			if(value.month)
+			{
+				label += '.' + ('0' + value.month).slice(-2);
+			}
+			if(value.week)
+			{
+				label += ' '+myWallet.t("тиждень")+' ' + value.week;
+			}
+			data.labels.push(label);
+			
+			data.datasets[0].data.push(value.amount);
+		}
+		
+		return data;
 	}
 }
 var reportGroupBySpengingName = {
@@ -1354,6 +1395,8 @@ myWallet.templates.reportAmountByPeriod =
 			<%=myWallet.t("Витрата")%>: \
 			<input type="text" name="spendingName" />\
 		</div>\
+\
+		<canvas class="chart" width="900" height="500"></canvas>\
 \
 	</div>';
 
@@ -2120,6 +2163,7 @@ var ReportAmountByPeriodView = Backbone.View.extend({
 	el: '#page',
 	template: myWallet.templates.reportAmountByPeriod,
 	report: null,
+	chart: null,
 	
 	events: {
 	},
@@ -2156,7 +2200,7 @@ var ReportAmountByPeriodView = Backbone.View.extend({
 				altFormat: "yy-mm-dd",
 				onClose: function(){
 					view.report.setDateBegin(view.$("input[name=dateBegin]").val());
-					view.render();
+					view.renderChart();
 				}
 			});
 			
@@ -2169,23 +2213,50 @@ var ReportAmountByPeriodView = Backbone.View.extend({
 				altFormat: "yy-mm-dd",
 				onClose: function(){
 					view.report.setDateEnd(view.$("input[name=dateEnd]").val());
-					view.render();
+					view.renderChart();
 				}
 			});
 			
 			this.$("select[name=groupByPeriod]").val(this.report.getGroupByPeriod());
 			this.$("select[name=groupByPeriod]").change(function(){
 				view.report.setGroupByPeriod($(this).val());
+				view.renderChart();
 			});
 			
+			this.$("input[name=spendingName]").val(this.report.getSpendingName() ? this.report.getSpendingName() : '');
 			this.$("input[name=spendingName]").blur(function(){
-				view.report.setSpendingName($(this).val());
+				view.report.setSpendingName($(this).val() ? $(this).val() : null);
+				view.renderChart();
 			});
 			//-------------------
 			
 			this.trigger('render');
 			
-			view.report.getData();
+			view.renderChart();
+		}
+	},
+	
+	renderChart: function() {
+		
+		if(this.chart)
+		{
+			this.chart.destroy();
+			this.chart.clear();
+		}
+		
+		if(!this.report.getData().length)
+		{
+			myWallet.msg('Для вказаних умов даних не знайдено');
+		}
+		else
+		{
+			var ctx = this.$("canvas.chart").get(0).getContext("2d");
+			var lineChart = new Chart(ctx).Line(
+				this.report.getDataForChart(), 
+				{animation: false}
+			);
+
+			this.chart = lineChart;
 		}
 	}
 	

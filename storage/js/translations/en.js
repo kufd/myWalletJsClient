@@ -72,4 +72,5 @@ myWallet.translations.en = {
 	"тижню": "week",
 	"місяцю": "month",
 	"року": "year",
+	"Для вказаних умов даних не знайдено": "Data not found for current conditions",
 }

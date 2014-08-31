@@ -22,6 +22,8 @@ myWallet.templates.reportAmountByPeriod =
 			<input type="text" name="spendingName" />\
 		</div>\
 \
+		<canvas class="chart" width="900" height="500"></canvas>\
+\
 	</div>';
 
 
